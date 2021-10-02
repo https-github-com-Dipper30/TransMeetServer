@@ -1,0 +1,27 @@
+{
+  "name": "transmeetserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "export NODE_ENV=development && nodemon src/app.js",
+    "product": "export NODE_ENV=production && nodemon src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/https-github-com-Dipper30/TransMeetServer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/https-github-com-Dipper30/TransMeetServer/issues"
+  },
+  "homepage": "https://github.com/https-github-com-Dipper30/TransMeetServer#readme",
+  "devDependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.13",
+    "sequelize": "^6.6.5",
+    "sequelize-cli": "^6.2.0"
+  }
+}
