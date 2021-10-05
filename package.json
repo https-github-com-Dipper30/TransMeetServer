@@ -21,13 +21,15 @@
   "homepage": "https://github.com/https-github-com-Dipper30/TransMeetServer#readme",
   "dependencies": {
     "@types/express": "^4.17.13",
-    "nodemon": "^2.0.13",
-    "ts-node": "^10.2.1",
     "body-parser": "^1.19.0",
     "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.0",
+    "nodemon": "^2.0.13",
     "request-validate": "^1.0.9",
     "sequelize": "^6.6.2",
     "sequelize-cli": "^6.2.0",
+    "ts-node": "^10.2.1",
     "validator": "^13.6.0"
   },
   "devDependencies": {

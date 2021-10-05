@@ -9,3 +9,7 @@ export enum gender {
   FEMALE = 1,
   NOT_APPLY = 2
 }
+
+export enum businessType {
+  
+}
