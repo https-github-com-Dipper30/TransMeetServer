@@ -6,6 +6,12 @@ export enum errCode {
   ACCESS_FAILURE = 10003,
   AUTH_FAILURE = 10004, // default
 
+  // config error code
+  CONFIG_FAILURE = 20000,
+  STATES_FAILURE = 20001,
+  REGION_FAILURE = 20002,
+  BUSINESS_FAILURE = 20003,
+
   // product error code
   PRODUCT_FAILURE = 30000,
   PRODUCT_NOT_FOUND = 30004,
@@ -16,6 +22,7 @@ export enum errCode {
   PAGE_REDIRECTED = 40001,
   PARAMETER_FAILURE = 40003,
   PAGE_NOT_FOUND = 40004,
+  DATABASE_FAILURE = 40005,
 
   // transaction error
   ORDER_FAILURE = 50000,
@@ -26,6 +33,7 @@ export enum errCode {
 
   // user error code
   USER_FAILURE = 60000,
+  USER_EXISTS = 60001,
 
   // store error code
   STORE_FAILURE = 70000,

@@ -1,9 +1,18 @@
 import { Router } from 'express'
-import { UserController } from '../controller/index'
+import { 
+  UserController,
+  AuthController,
+  ConfigController
+} from '../controller/index'
 
 const router: Router = Router()
 
-router.get('/user', UserController.getUserByID)
+// auth
+router.post('/register', AuthController.register)
+router.post('/login', AuthController.login)
+
+// config
+router.get('/states', ConfigController.getStates)
 
 // account
 // router.post('/checkAccount', AccountController.checkAccount)
