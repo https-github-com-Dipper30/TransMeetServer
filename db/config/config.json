@@ -1,5 +1,5 @@
 {
-  "development": {
+  "d": {
     "username": "root",
     "password": "123456",
     "database": "tsm",
@@ -13,10 +13,17 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-  "production": {
+  "development": {
+    "username": "admin",
+    "password": "db123456",
+    "database": "db",
+    "host": "db.chqoyv7zkx75.us-east-2.rds.amazonaws.com",
+    "dialect": "mysql"
+  },
+  "ali": {
     "username": "root",
-    "password": null,
-    "database": "database_production",
+    "password": "ali@DB123456",
+    "database": "estudydb",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
