@@ -1,7 +1,7 @@
 import BaseService from "./BaseService"
 
 const models = require('../../db/models')
-const { State } = models
+const { State, Business_Type, Region } = models
 
 class Config extends BaseService {
 
@@ -24,6 +24,22 @@ class Config extends BaseService {
           region_id: region_id
         }
       })
+    } catch (error) {
+      return false
+    }
+  }
+
+  async getBusinessTypes () {
+    try {
+      return await Business_Type.findAll()
+    } catch (error) {
+      return false
+    }
+  }
+
+  async getRegions () {
+    try {
+      return await Region.findAll()
     } catch (error) {
       return false
     }

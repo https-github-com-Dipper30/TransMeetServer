@@ -55,6 +55,12 @@ class BaseValidator implements Validator {
   isUnixTimeStamp (ts: number): Boolean {
     return !!ts && typeof ts == 'number' && ts.toString().length === 10
   }
+
+  // check zip code, 5-digit long
+  isZipCode (code: any): Boolean {
+    return !!code && typeof code == 'number' && code.toString.length == 5
+  }
+
 }
 
 module.exports = BaseValidator

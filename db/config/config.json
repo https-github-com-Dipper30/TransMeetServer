@@ -1,5 +1,5 @@
 {
-  "d": {
+  "development": {
     "username": "root",
     "password": "123456",
     "database": "tsm",
@@ -13,7 +13,7 @@
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
-  "development": {
+  "d": {
     "username": "admin",
     "password": "db123456",
     "database": "db",

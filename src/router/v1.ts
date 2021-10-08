@@ -2,7 +2,8 @@ import { Router } from 'express'
 import { 
   UserController,
   AuthController,
-  ConfigController
+  ConfigController,
+  StoreController
 } from '../controller/index'
 
 const router: Router = Router()
@@ -13,6 +14,13 @@ router.post('/login', AuthController.login)
 
 // config
 router.get('/states', ConfigController.getStates)
+router.get('/businessTypes', ConfigController.getBusinessTypes)
+router.get('/regions', ConfigController.getRegions)
+router.post('/staff', ConfigController.addStaff)
+router.get('/staff', ConfigController.getStaff)
+
+// store
+router.post('/store', StoreController.addStore)
 
 // account
 // router.post('/checkAccount', AccountController.checkAccount)

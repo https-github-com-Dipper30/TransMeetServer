@@ -2,7 +2,7 @@ const BaseValidator = require("./BaseValidator")
 const role = require('../config/auth')
 const validator = require('validator')
 
-class AuthValidator extends BaseValidator {
+export default class AuthValidator extends BaseValidator {
 
   // type check
   rules = [
@@ -70,5 +70,3 @@ class AuthValidator extends BaseValidator {
     return this.checkParams(this.params, this.rules)
   }
 }
-
-module.exports = AuthValidator

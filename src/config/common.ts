@@ -13,3 +13,9 @@ export enum gender {
 export enum businessType {
   
 }
+
+export enum jobTitle {
+  SALESPERSON = 1,
+  STORE_MANAGER = 2,
+  REGION_MANAGER = 3
+}

@@ -107,6 +107,20 @@ module.exports = {
         manager_id: null,
       }
     ], {})
+    await queryInterface.bulkInsert('Business_Types', [
+      {
+        name: 'Factory',
+        type: 1,
+      },
+      {
+        name: 'Internet Services',
+        type: 2,
+      },
+      {
+        name: 'Media Company',
+        type: 3,
+      },
+    ], {})
   },
 
   down: async (queryInterface, Sequelize) => {

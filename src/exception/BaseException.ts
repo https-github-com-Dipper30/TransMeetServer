@@ -4,7 +4,7 @@ class BaseException extends Error implements Exception {
 
   readonly code: number
 
-  constructor (message: string, code: number = 400) {
+  constructor (message: string, code: number = 500) {
     super(message)
     this.code = code
   }
