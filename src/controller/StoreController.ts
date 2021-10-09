@@ -1,9 +1,9 @@
 import { errCode } from "../config/errCode"
 import { ParameterException, StoreException } from "../exception"
 import { StoreType } from '../types/Service'
-import StoreValidator from "../validator/StoreValidator"
+import { StoreValidator } from "../validator"
 import BaseController from "./BaseController"
-const StoreService = require('../service/StoreService')
+import { StoreService } from "../service"
 
 class Store extends BaseController {
 

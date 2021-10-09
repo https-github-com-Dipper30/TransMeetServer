@@ -47,4 +47,4 @@ class Config extends BaseService {
 
 }
 
-module.exports = new Config()
+export default new Config()

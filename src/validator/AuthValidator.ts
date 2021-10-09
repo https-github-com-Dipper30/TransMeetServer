@@ -27,25 +27,26 @@ export default class AuthValidator extends BaseValidator {
         'annual_income|number|allowNull',
         'street|string|required',
         'city|string|required',
-        'state|number|required',
+        'state_id|number|required',
         'zip_code|number|required'
       ]
       return this.checkParams(this.params, hRule)
     } else if (role_id == role.BUSINESS_CUSTOMER) {
       const bRule = [
+        'name|string|required',
         'annual_income|number|allowNull',
         'street|string|required',
         'city|string|required',
-        'state|number|required',
+        'state_id|number|required',
         'zip_code|number|required',
-        'cate|string|required'
+        'cate|number|required'
       ]
-      return this.checkParams(this.params, bRule)
+      return this.checkParams(this.params, bRule) && this.isShortName(this.params.name)
     } else if (role_id == role.ADMIN) {
       const aRule = [
         'name|string|required'
       ]
-      return this.checkParams(this.params, aRule)
+      return this.checkParams(this.params, aRule) && this.isShortName(this.params.name)
     }
     return true
   }

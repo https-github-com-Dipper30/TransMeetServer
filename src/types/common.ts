@@ -1,5 +1,5 @@
 export interface Validator {
-  readonly checkParams: Function,
+  checkParams: Function,
   params: any,
   [fn: string]: any,
 }

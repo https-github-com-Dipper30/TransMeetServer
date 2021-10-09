@@ -31,4 +31,4 @@ class Token {
   }
 }
 
-module.exports = Token
+export default Token

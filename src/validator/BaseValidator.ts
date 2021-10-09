@@ -1,4 +1,5 @@
 const validator = require('validator')
+import { type } from 'os'
 import { Validator } from '../types/common'
 
 class BaseValidator implements Validator {
@@ -59,6 +60,24 @@ class BaseValidator implements Validator {
   // check zip code, 5-digit long
   isZipCode (code: any): Boolean {
     return !!code && typeof code == 'number' && code.toString.length == 5
+  }
+
+  // check if the number is between min and max
+  // or check if the length of string is between min and max
+  isBetween (p: any, min: number, max: number): Boolean {
+    return !!p 
+    && (typeof p == 'number' && p >= min && p <= max)
+    || (typeof p == 'string' && p.length >= min && p.length <=max)
+  }
+
+  // check if the length of name is between [3, 15]
+  // you can use function isBetween of course, but this is more convenient in particular cases
+  isShortName (p: any): Boolean {
+    return this.isBetween(p, 3, 15)
+  }
+
+  isLongName (p: any): Boolean {
+    return this.isBetween(p, 5, 30)
   }
 
 }

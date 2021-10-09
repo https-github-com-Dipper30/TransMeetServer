@@ -1,8 +1,8 @@
 import { errCode } from "../config/errCode"
 import { ParameterException } from "../exception"
-import ConfigException from "../exception/ConfigException"
+import { ConfigException } from "../exception"
 import BaseController from "./BaseController"
-const ConfigService = require('../service/ConfigService')
+import { ConfigService } from "../service"
 const B = require('../validator/BaseValidator')
 const BaseValidator = new B()
 

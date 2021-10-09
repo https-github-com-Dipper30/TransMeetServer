@@ -3,10 +3,8 @@ import { User, HomeCustomer, Admin, BusinessCustomer } from '../types/User'
 import { Validator, Account } from '../types/common'
 import { AuthException, ParameterException, UserException, DatabaseException } from '../exception'
 import { errCode } from '../config/errCode'
-
-const AuthValidator = require('../validator/AuthValidator')
-const AuthService = require('../service/AuthService')
-const TokenService = require('../service/TokenService')
+import { AuthValidator } from '../validator'
+import { AuthService, TokenService } from "../service"
 
 class Auth extends BaseController {
   constructor () {
@@ -16,10 +14,10 @@ class Auth extends BaseController {
   async checkAccount (req: any, res: any, next: any): Promise<any> {
     try {
       const data = req.body
-      const valid: any = new AuthValidator(data)
+      const valid: AuthValidator = new AuthValidator(data)
       if (!valid.checkUsername()) throw new ParameterException()
 
-      const userExists: Boolean = AuthService.findAccount(data.username)
+      const userExists: Boolean = await AuthService.findAccount(data.username)
       if (userExists) throw new UserException('User Exists!', errCode.USER_EXISTS)
     } catch (error) {
       next(error)
@@ -29,7 +27,7 @@ class Auth extends BaseController {
   async register (req: any, res: any, next: any): Promise<any> {
     try {
       const data: User|Admin|HomeCustomer|BusinessCustomer = req.body
-      const valid: Validator = new AuthValidator(data)
+      const valid: AuthValidator = new AuthValidator(data)
       if (!valid.checkAuthParam()) throw new ParameterException()
 
       const userExists: Boolean = await AuthService.findAccount(data.username)
@@ -50,7 +48,7 @@ class Auth extends BaseController {
   async login (req: any, res: any, next: any): Promise<any> {
     try {
       const data: Account = req.body
-      const valid: Validator = new AuthValidator(data)
+      const valid: AuthValidator = new AuthValidator(data)
       if (!valid.checkAccountParam()) throw new ParameterException()
 
       const user: any = await AuthService.loginAccount(data)

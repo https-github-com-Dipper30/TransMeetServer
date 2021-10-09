@@ -8,6 +8,9 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      name: {
+        type: Sequelize.STRING
+      },
       annual_income: {
         type: Sequelize.INTEGER
       },
@@ -21,6 +24,9 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       zip_code: {
+        type: Sequelize.INTEGER
+      },
+      cate: {
         type: Sequelize.INTEGER
       },
       uid: {

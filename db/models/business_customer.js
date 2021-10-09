@@ -14,13 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Business_Customer.init({
+    name: DataTypes.STRING,
     annual_income: DataTypes.INTEGER,
     street: DataTypes.STRING,
     city: DataTypes.STRING,
     state_id: DataTypes.INTEGER,
     zip_code: DataTypes.INTEGER,
     uid: DataTypes.INTEGER,
-    cate: DataTypes.STRING,
+    cate: DataTypes.INTEGER,
   }, {
     sequelize,
     timestamps: false,

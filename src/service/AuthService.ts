@@ -21,7 +21,7 @@ class Auth extends BaseService {
     super()
   } 
 
-  async findAccount (username: string) {
+  async findAccount (username: string): Promise<Boolean> {
     try {
       //TODO ignore case
       const hasAccount = await UserModel.findOne({
@@ -29,7 +29,7 @@ class Auth extends BaseService {
           username
         }
       })
-      return !!hasAccount
+      return Boolean(hasAccount)
     } catch (error) {
       return false
     }
@@ -41,6 +41,7 @@ class Auth extends BaseService {
     try {
       // transaction
       // create user
+      console.log(params)
       const user = await UserModel.create({
         username: params.username,
         password: encryptMD5(params.password),
@@ -60,6 +61,7 @@ class Auth extends BaseService {
       } else if (role_id == role.BUSINESS_CUSTOMER) {
         //
         res = await Business_Customer.create({
+          name: params.name,
           cate: params.cate,
           annual_income: params.annual_income,
           street: params.street,
@@ -102,13 +104,35 @@ class Auth extends BaseService {
         }
       })
       if ( !user ) return false
+      // get details from Home_Customer || Business_Customer || Admin_Customer
+      let detail: any
+      if (user.role_id == role.ADMIN) {
+        detail = await AdminModel.findOne({
+          where: {
+            uid: user.id
+          }
+        })
+      } else if (user.role_id == role.HOME_CUSTOMER) {
+        detail = await Home_Customer.findOne({
+          where: {
+            uid: user.id
+          }
+        })
+      } else if (user.role_id == role.BUSINESS_CUSTOMER) {
+        detail = await Business_Customer.findOne({
+          where: {
+            uid: user.id
+          }
+        })
+      }
+      if (!detail) return false
       /**
        * get access
        * select name from access_roles join accesses on aid = accesses.type where rid = user.role_id;
        */
-      const [accesses, metadata] = await sequelize.query(`select name from access_roles join accesses on aid = accesses.type where rid = ${user.role_id};`)
-      const auth = Array.from(accesses).map((ac: any) => ac.name)
-      const res = omitFields(user.dataValues, ['password'])
+      const [accesses, metadata] = await sequelize.query(`select type from access_roles join accesses on aid = accesses.type where rid = ${user.role_id};`)
+      const auth = Array.from(accesses).map((ac: any) => ac.type)
+      const res = omitFields({...user.dataValues, ...detail.dataValues}, ['password'])
 
       return {
         ...res,
@@ -121,4 +145,4 @@ class Auth extends BaseService {
 
 }
 
-module.exports = new Auth()
+export default new Auth()

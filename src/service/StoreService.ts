@@ -27,4 +27,4 @@ class Store extends BaseService {
 
 }
 
-module.exports = new Store()
+export default new Store()

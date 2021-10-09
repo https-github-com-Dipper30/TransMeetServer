@@ -18,6 +18,7 @@ export interface HomeCustomer extends User {
 }
 
 export interface BusinessCustomer extends User {
+  name: string,
   annual_income: number,
   street: string,
   city: string,
