@@ -1,3 +1,5 @@
+import BaseException from "../exception/BaseException"
+
 const crypto = require('crypto')
 const { MD5_PRIVATE_KEY } = require('../config/key')
 
@@ -41,4 +43,13 @@ export const omitFields = (rawData: any, attrsToOmit: string[] = attrs): ThisTyp
 
 export const encryptMD5 = (plainText: string) => {
   return crypto.createHash('md5').update(plainText).update(MD5_PRIVATE_KEY).digest('hex')
+}
+
+/**
+ * check if the parameter is an instance of Error
+ * @param {any} p  
+ * @returns 
+ */
+export const isError = (p: any) => {
+  return p instanceof BaseException || p instanceof Error
 }

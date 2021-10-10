@@ -1,9 +1,11 @@
+import { errCode } from '../config/errCode'
+import { ExceptionConfig } from '../types/common'
 import BaseException from './BaseException'
 
 class ConfigException extends BaseException {
 
-  constructor (message: string = 'Auth Failure', code: number = 6000) {
-    super(message, code)
+  constructor (code: number = errCode.CONFIG_ERROR, message?: string|null|undefined) {
+    super(code, message)
   }
 }
 

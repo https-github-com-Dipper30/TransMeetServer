@@ -18,7 +18,7 @@ class Auth extends BaseController {
       if (!valid.checkUsername()) throw new ParameterException()
 
       const userExists: Boolean = await AuthService.findAccount(data.username)
-      if (userExists) throw new UserException('User Exists!', errCode.USER_EXISTS)
+      if (userExists) throw new UserException(errCode.USER_EXISTS)
     } catch (error) {
       next(error)
     }
@@ -31,7 +31,7 @@ class Auth extends BaseController {
       if (!valid.checkAuthParam()) throw new ParameterException()
 
       const userExists: Boolean = await AuthService.findAccount(data.username)
-      if (userExists) throw new UserException('User Exists!', errCode.USER_EXISTS)
+      if (userExists) throw new UserException(errCode.USER_EXISTS)
 
       const user: any = await AuthService.addAccount(data)
       if (!user) throw new DatabaseException()
@@ -52,7 +52,7 @@ class Auth extends BaseController {
       if (!valid.checkAccountParam()) throw new ParameterException()
 
       const user: any = await AuthService.loginAccount(data)
-      if (!user) throw new UserException('Incorrect username or password!', errCode.LOGIN_FAILURE)
+      if (!user) throw new AuthException(errCode.LOGIN_ERROR)
 
       // logged in, return a token
       const t = new TokenService(user.id)

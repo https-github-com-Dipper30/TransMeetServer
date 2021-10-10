@@ -2,17 +2,18 @@ import { errCode } from '../config/errCode'
 import { ExceptionConfig } from '../types/common'
 import BaseException from './BaseException'
 
-class ParameterException extends BaseException {
-  
+class StaffException extends BaseException {
+
   config: ExceptionConfig = {
-    [errCode.PARAMETER_ERROR]: 'Nah Nah...Parameters are not in the right form.',
+    [errCode.STAFF_ERROR]: 'Staff Error!',
     [errCode.REGION_ALREADY_HAS_MANAGER]: 'Region Already Has Manager!',
     [errCode.STORE_ALREADY_HAS_MANAGER]: 'Store Already Has Manager!',
+    [errCode.STAFF_ALREADY_EXISTS]: 'Umm... Staff already there...'
   }
 
-  constructor (code: number = errCode.PARAMETER_ERROR, message?: string|null|undefined) {
+  constructor (code: number = errCode.STAFF_ERROR, message?: string|null|undefined) {
     super(code, message)
   }
 }
 
-export default ParameterException
+export default StaffException

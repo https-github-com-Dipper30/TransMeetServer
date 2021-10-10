@@ -1,8 +1,12 @@
 import { errCode } from "../config/errCode"
-import { ParameterException } from "../exception"
+import { DatabaseException, ParameterException } from "../exception"
 import { ConfigException } from "../exception"
 import BaseController from "./BaseController"
-import { ConfigService } from "../service"
+import { Staff } from '../types/User'
+import { ConfigService, StaffService } from "../service"
+import StaffValidator from "../validator/StaffValidator"
+import BaseException from "../exception/BaseException"
+import { isError } from "../utils/tools"
 const B = require('../validator/BaseValidator')
 const BaseValidator = new B()
 
@@ -20,12 +24,12 @@ class Config extends BaseController {
       if (!region_id && region_id != 0) getStatesFn = ConfigService.getStates
       else {
         region_id = parseInt(region_id)
-        if (!BaseValidator.isPositiveInteger(region_id)) throw new ParameterException('Invalid ID')
+        if (!BaseValidator.isPositiveInteger(region_id)) throw new ParameterException(errCode.PARAMETER_ERROR, 'Wrong ID')
         getStatesFn = ConfigService.getStatesInRegion
       }
 
       const states = await getStatesFn(region_id)
-      if (!states) throw new ConfigException('States error', errCode.STATES_FAILURE)
+      if (!states) throw new ConfigException(errCode.STATES_ERROR)
     
       res.json({
         code: 200,
@@ -39,7 +43,7 @@ class Config extends BaseController {
   async getBusinessTypes (req: any, res: any, next: any): Promise<any> {
     try {
       const bts = await ConfigService.getBusinessTypes()
-      if (!bts) throw new ConfigException('Business error', errCode.BUSINESS_FAILURE)
+      if (!bts) throw new ConfigException(errCode.BUSINESS_ERROR)
     
       res.json({
         code: 200,
@@ -53,7 +57,7 @@ class Config extends BaseController {
   async getRegions (req: any, res: any, next: any): Promise<any> {
     try {
       const regions = await ConfigService.getRegions()
-      if (!regions) throw new ConfigException('Region error', errCode.REGION_FAILURE)
+      if (!regions) throw new ConfigException(errCode.REGION_ERROR)
     
       res.json({
         code: 200,
@@ -68,13 +72,21 @@ class Config extends BaseController {
   async addStaff (req: any, res: any, next: any): Promise<any> {
     try {
       // const regions = await ConfigService.getRegions()
-      // if (!regions) throw new ConfigException('Region error', errCode.REGION_FAILURE)
-    
+      // if (!regions) throw new ConfigException('Region error', errCode.REGION_ERROR)
+      const data: Staff = req.body
 
+      const valid = new StaffValidator(data)
+      if (!valid.goCheck()) throw new ParameterException()
+
+      const created: any = await StaffService.addStaff(data)
+      console.log(created.code, created.message)
+      if (isError(created)) throw created
+
+      if (!created) throw new DatabaseException()
 
       res.json({
-        code: 200,
-        data: 1
+        code: 201,
+        data: 'Staff Created!'
       })
     } catch (error) {
       next(error)
@@ -86,7 +98,7 @@ class Config extends BaseController {
   async getStaff (req: any, res: any, next: any): Promise<any> {
     try {
       // const regions = await ConfigService.getRegions()
-      // if (!regions) throw new ConfigException('Region error', errCode.REGION_FAILURE)
+      // if (!regions) throw new ConfigException('Region error', errCode.REGION_ERROR)
     
 
 

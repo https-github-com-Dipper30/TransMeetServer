@@ -30,3 +30,11 @@ export interface BusinessCustomer extends User {
 export interface Admin extends User {
   name: string,
 }
+
+export interface Staff {
+  name: string,
+  job_title: number,
+  store_assigned?: number|null,
+  region_assigned?: number,
+  salary: number,
+}

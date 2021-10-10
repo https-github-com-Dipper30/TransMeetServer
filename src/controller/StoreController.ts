@@ -16,10 +16,10 @@ class Store extends BaseController {
       const data: StoreType = req.body
 
       const valid = new StoreValidator(data)
-      if (!valid.goCheck()) throw new ParameterException('Store parameter error')
+      if (!valid.goCheck()) throw new ParameterException()
 
       const created = await StoreService.addStore(data)
-      if (created === false) throw new StoreException('Duplicates Or Unknown Error!')
+      if (created === false) throw new StoreException(errCode.STORE_ALREADY_EXISTS)
 
       res.json({
         code: 201,

@@ -7,9 +7,15 @@ export interface Validator {
 export interface Exception {
   code: number,
   message: string,
+  config: ExceptionConfig,
 }
 
 export interface Account {
   username: string,
   password: string
+}
+ 
+
+export interface ExceptionConfig {
+  [errCode: number]: string
 }
