@@ -11,6 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
+   
     await queryInterface.bulkInsert('Accesses', [
       {
         name: 'browse products',
@@ -35,7 +36,7 @@ module.exports = {
       {
         name: 'login cms',
         type: 6,
-      }
+      },
     ], {})
     await queryInterface.bulkInsert('Roles', [
       {
