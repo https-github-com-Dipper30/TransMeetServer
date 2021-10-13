@@ -38,7 +38,7 @@ class Auth extends BaseController {
 
       res.json({
         code: 201,
-        msg: 'User Created!'
+        msg: 'User Created!',
       })
     } catch (error) {
       next(error)
@@ -62,8 +62,8 @@ class Auth extends BaseController {
         code: 200,
         data: {
           user,
-          token
-        }
+          token,
+        },
       })
     } catch (error) {
       next(error)

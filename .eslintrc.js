@@ -22,7 +22,6 @@ module.exports = {
       "comma-style": ["warn", "last"],
       "comma-spacing": ["warn", { "before": false, "after": true }],
       "comma-dangle": ["warn", "always-multiline"],
-      "camelcase": "warn",
       "no-implicit-coercion": "warn",
       "no-invalid-this": "warn",
       "no-multi-spaces": "warn",
