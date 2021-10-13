@@ -14,7 +14,7 @@ module.exports = {
     await queryInterface.bulkInsert('States', [
       {
         name: 'Pennsylvania',
-        region_id: 0,
+        region_id: 10,
       },
       {
         name: 'New York',
