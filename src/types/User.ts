@@ -38,3 +38,12 @@ export interface Staff {
   region_assigned?: number,
   salary: number,
 }
+
+// get request for staff
+export interface GetStaff {
+  id?: number|null,
+  region_assigned?: number|null,
+  store_assigned?: number|null,
+  job_title?: number|null,
+  salary?: number|null,
+}

@@ -1,9 +1,8 @@
 import { Router } from 'express'
 import { 
-  UserController,
   AuthController,
   ConfigController,
-  StoreController
+  StoreController,
 } from '../controller/index'
 
 const router: Router = Router()
@@ -31,6 +30,5 @@ router.post('/store', StoreController.addStore)
 // router.get('/user/:id', UserController.getUserByID)
 // router.post('/updateUser', UserController.updateUser)
 // router.post('/user', UserController.createUser)
-
 
 module.exports = router

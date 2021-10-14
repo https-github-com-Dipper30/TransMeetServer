@@ -1,7 +1,5 @@
-const BaseValidator = require("./BaseValidator")
+const BaseValidator = require('./BaseValidator')
 import { jobTitle } from '../config/common'
-const role = require('../config/auth')
-const validator = require('validator')
 
 export default class StaffValidator extends BaseValidator {
 
@@ -25,4 +23,16 @@ export default class StaffValidator extends BaseValidator {
     && [(this.params.job_title != jobTitle.REGION_MANAGER && this.params.store_assigned)
     || this.params.job_title == jobTitle.REGION_MANAGER ]
   }
+
+  checkGet (): any {
+    const gRule = [
+      'id|number|allowNull',
+      'region_assigned|number|allowNull',
+      'store_assigned|number|allowNull',
+      'job_title|number|allowNull',
+      'salary|number|allowNull',
+    ]
+    return this.checkQuery(this.params, gRule)
+  }
+
 }

@@ -1,9 +1,9 @@
-import ParameterException from "./ParameterException"
-import AuthException from "./AuthException"
+import ParameterException from './ParameterException'
+import AuthException from './AuthException'
 import UserException from './UserException'
 import DatabaseException from './DatabaseException'
 import StoreException from './StoreException'
-import ConfigException from "./ConfigException"
+import ConfigException from './ConfigException'
 
 export {
   AuthException,
@@ -11,5 +11,5 @@ export {
   UserException,
   DatabaseException,
   StoreException,
-  ConfigException
+  ConfigException,
 }

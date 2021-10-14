@@ -1,16 +1,19 @@
-import BaseService from "./BaseService"
-import { Staff as StaffType } from '../types/User'
-import { jobTitle } from "../config/common"
-import { ConfigException, DatabaseException, StoreException } from "../exception"
-import { errCode } from "../config/errCode"
-import StaffException from "../exception/StaffException"
-import { Transaction } from "sequelize/types"
+import BaseService from './BaseService'
+import { Staff as StaffType, GetStaff } from '../types/User'
+import { jobTitle } from '../config/common'
+import { ConfigException, DatabaseException, StoreException } from '../exception'
+import { errCode } from '../config/errCode'
+import StaffException from '../exception/StaffException'
+import { Transaction } from 'sequelize/types'
+import { createCriteria } from '../utils/tools'
+import Sequelize from 'sequelize'
+const Op = Sequelize.Op
 const { sequelize } = require('../../db/models')
 const models = require('../../db/models')
 const { 
   Staff: StaffModel,
   Region: RegionModel,
-  Store: StoreModel
+  Store: StoreModel,
 } = models
 
 class Staff extends BaseService {
@@ -27,8 +30,8 @@ class Staff extends BaseService {
       // firstly, check if the region exists
       const region = await RegionModel.findOne({
         where: {
-          id: staff.region_assigned
-        }
+          id: staff.region_assigned,
+        },
       })
 
       if (!region) throw new ConfigException(errCode.REGION_NOT_FOUND, 'The staff has no region to go to...')
@@ -37,8 +40,8 @@ class Staff extends BaseService {
       if (staff.job_title != jobTitle.REGION_MANAGER) {
         const store = await StoreModel.findOne({
           where: {
-            id: staff.store_assigned
-          }
+            id: staff.store_assigned,
+          },
         })
         if (!store) throw new StoreException(errCode.STORE_NOT_FOUND, 'The staff has no store to go to...')
 
@@ -46,22 +49,18 @@ class Staff extends BaseService {
         if (staff.job_title == jobTitle.STORE_MANAGER) {
           if (store.manager_id) throw new ConfigException(errCode.STORE_ALREADY_HAS_MANAGER)
           // insert store manager
-          console.log('insert store')
           return await this.insertStoreManager(staff, store)
         }
 
         // 4. if the staff is a salesperson, then make sure there are no duplicate names in the same store
         if (staff.job_title == jobTitle.SALESPERSON) {
           // insert salesperson
-          console.log('insert sp')
           return await this.insertSalesPerson(staff)
         }
       } else {
         // 5. if the staff is a region manager, we need to make sure the region does not have a manager already
-        console.log('dup', new ConfigException(errCode.REGION_ALREADY_HAS_MANAGER))
         if (region.manager_id) throw new ConfigException(errCode.REGION_ALREADY_HAS_MANAGER)
         // insert region manager
-        console.log('insert region')
         return await this.insertRegionManager(staff, region)
       }
       return false
@@ -74,10 +73,9 @@ class Staff extends BaseService {
 
     const t = await sequelize.transaction()
     try {
-      const s = await StaffModel.create(staff, {transaction: t})
+      const s = await StaffModel.create(staff, { transaction: t })
       region.manager_id = s.id
       await region.save()
-      console.log('??')
       await t.commit()
       return true
     } catch (error) {
@@ -91,7 +89,7 @@ class Staff extends BaseService {
 
     const t = await sequelize.transaction()
     try {
-      const s = await StaffModel.create(staff, {transaction: t})
+      const s = await StaffModel.create(staff, { transaction: t })
       store.manager_id = s.id
       await store.save()
       return await t.commit()
@@ -108,9 +106,9 @@ class Staff extends BaseService {
       const [res, created] = await StaffModel.findOrCreate({
         where: {
           name: staff.name,
-          store_assigned: staff.store_assigned
+          store_assigned: staff.store_assigned,
         },
-        defaults: staff
+        defaults: staff,
       })
       if (!created) return new StaffException(errCode.STAFF_ALREADY_EXISTS)
     } catch (error) {
@@ -118,6 +116,30 @@ class Staff extends BaseService {
       await t.rollback()
       return new DatabaseException(errCode.TRANSACTION_ERROR)
     }
+  }
+
+  async getStaff (query: GetStaff) {
+    const criteria: Object = createCriteria(query, ['id', 'region_assigned', 'store_assigned', 'job_title', 'salary'])
+    if (criteria.hasOwnProperty('salary')) {
+      Object.defineProperty(criteria, 'salary', {
+        value: {
+          [Op.lt]: query.salary,
+        },
+      })
+    }
+
+    const staff = await StaffModel.findAll({
+      where: criteria,
+      order: [
+        ['job_title', 'DESC'],
+        ['salary', 'DESC'],
+        ['region_assigned'],
+        ['store_assigned'],
+      ],
+    })
+    if (!staff) return new StaffException(errCode.STAFF_ERROR)
+
+    return staff
   }
 
 }

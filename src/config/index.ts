@@ -1,22 +1,22 @@
 import {
   region,
   state,
-  statesInRegion
+  statesInRegion,
 } from './region'
 
 import {
   role,
-  access
+  access,
 } from './auth'
 
 import { errCode } from './errCode'
 
 import {
   marriageStatus,
-  gender
+  gender,
 } from './common'
 
-export default {
+export {
   region,
   state,
   statesInRegion,
@@ -24,5 +24,5 @@ export default {
   access,
   errCode,
   marriageStatus,
-  gender
+  gender,
 }

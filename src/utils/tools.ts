@@ -1,11 +1,11 @@
-import BaseException from "../exception/BaseException"
+import BaseException from '../exception/BaseException'
 
 const crypto = require('crypto')
 const { MD5_PRIVATE_KEY } = require('../config/key')
 
 const attrs: string[] = [
   'createdAt',
-  'updatedAt'
+  'updatedAt',
 ]
 
 /**
@@ -52,4 +52,39 @@ export const encryptMD5 = (plainText: string) => {
  */
 export const isError = (p: any) => {
   return p instanceof BaseException || p instanceof Error
+}
+
+/**
+ * create an object including all criteria for dynamic searching
+ * @param {object} o
+ * @returns {object} criteria for where matching
+ */
+
+export const createCriteria = (o: any, attrs?: string[]|null) => {
+  if (!(o instanceof Object)) return {}
+  let criteria = {}
+  // if attrs is provided, iterate the array
+  // if the attribute does not exist in object, ignore it
+  if (attrs) {
+    for (let attribute of attrs) {
+      if (o.hasOwnProperty(attribute) && !criteria.hasOwnProperty(attribute)) {
+        Object.defineProperty(criteria, attribute, {
+          value: o[attribute],
+          enumerable: true,
+          writable: true,
+        })
+      }
+    }
+  } else {
+    for (let attribute in o) {
+      if (!criteria.hasOwnProperty(attribute)) {
+        Object.defineProperty(criteria, attribute, {
+          value: o[attribute],
+          enumerable: true,
+          writable: true,
+        })
+      }
+    }
+  }
+  return criteria
 }

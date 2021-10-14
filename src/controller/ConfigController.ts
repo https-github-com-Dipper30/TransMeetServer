@@ -1,12 +1,11 @@
-import { errCode } from "../config/errCode"
-import { DatabaseException, ParameterException } from "../exception"
-import { ConfigException } from "../exception"
-import BaseController from "./BaseController"
-import { Staff } from '../types/User'
-import { ConfigService, StaffService } from "../service"
-import StaffValidator from "../validator/StaffValidator"
-import BaseException from "../exception/BaseException"
-import { isError } from "../utils/tools"
+import { errCode } from '../config'
+import { DatabaseException, ParameterException } from '../exception'
+import { ConfigException } from '../exception'
+import BaseController from './BaseController'
+import { GetStaff, Staff } from '../types/User'
+import { ConfigService, StaffService } from '../service'
+import StaffValidator from '../validator/StaffValidator'
+import { isError } from '../utils/tools'
 const B = require('../validator/BaseValidator')
 const BaseValidator = new B()
 
@@ -33,7 +32,7 @@ class Config extends BaseController {
     
       res.json({
         code: 200,
-        data: states
+        data: states,
       })
     } catch (error) {
       next(error)
@@ -47,7 +46,7 @@ class Config extends BaseController {
     
       res.json({
         code: 200,
-        data: bts
+        data: bts,
       })
     } catch (error) {
       next(error)
@@ -61,7 +60,7 @@ class Config extends BaseController {
     
       res.json({
         code: 200,
-        data: regions
+        data: regions,
       })
     } catch (error) {
       next(error)
@@ -79,14 +78,13 @@ class Config extends BaseController {
       if (!valid.goCheck()) throw new ParameterException()
 
       const created: any = await StaffService.addStaff(data)
-      console.log(created.code, created.message)
       if (isError(created)) throw created
 
       if (!created) throw new DatabaseException()
 
       res.json({
         code: 201,
-        data: 'Staff Created!'
+        data: 'Staff Created!',
       })
     } catch (error) {
       next(error)
@@ -94,17 +92,20 @@ class Config extends BaseController {
   }
 
   // get all staff
-  // dynamic criteria {id || region_assigned || store_assigned || job_title }
+  // dynamic criteria { id || region_assigned || store_assigned || job_title }
   async getStaff (req: any, res: any, next: any): Promise<any> {
     try {
-      // const regions = await ConfigService.getRegions()
-      // if (!regions) throw new ConfigException('Region error', errCode.REGION_ERROR)
-    
+      const query: GetStaff = req.query
+      const valid = new StaffValidator(query)
+      const data = valid.checkGet()
+      if (!data) throw new ParameterException()
 
+      const staff = await StaffService.getStaff(data)
+      if (isError(staff)) throw staff
 
       res.json({
         code: 200,
-        data: 1
+        data: staff,
       })
     } catch (error) {
       next(error)

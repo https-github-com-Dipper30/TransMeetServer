@@ -26,8 +26,8 @@ class Auth extends BaseService {
       //TODO ignore case
       const hasAccount = await UserModel.findOne({
         where: {
-          username
-        }
+          username,
+        },
       })
       return Boolean(hasAccount)
     } catch (error) {
@@ -41,12 +41,11 @@ class Auth extends BaseService {
     try {
       // transaction
       // create user
-      console.log(params)
       const user = await UserModel.create({
         username: params.username,
         password: encryptMD5(params.password),
-        role_id: params.role_id
-      }, {transaction: t})
+        role_id: params.role_id,
+      }, { transaction: t })
 
       const { id } = user // user id
       const { role_id } = params
@@ -56,8 +55,7 @@ class Auth extends BaseService {
         res = await AdminModel.create({
           name: params.name,
           uid: id,
-        }, {transaction: t})
-        console.log('admin added')
+        }, { transaction: t })
       } else if (role_id == role.BUSINESS_CUSTOMER) {
         //
         res = await Business_Customer.create({
@@ -69,7 +67,7 @@ class Auth extends BaseService {
           state_id: params.state_id,
           zip_code: params.zip_code,
           uid: id,
-        }, {transaction: t})
+        }, { transaction: t })
       } else if (role_id == role.HOME_CUSTOMER) {
         //
         res = await Home_Customer.create({
@@ -82,7 +80,7 @@ class Auth extends BaseService {
           state_id: params.state_id,
           zip_code: params.zip_code,
           uid: id,
-        }, {transaction: t})
+        }, { transaction: t })
       }
       await t.commit()
       return res
@@ -100,8 +98,8 @@ class Auth extends BaseService {
       const user = await UserModel.findOne({
         where: {
           username,
-          password: p
-        }
+          password: p,
+        },
       })
       if ( !user ) return false
       // get details from Home_Customer || Business_Customer || Admin_Customer
@@ -109,20 +107,20 @@ class Auth extends BaseService {
       if (user.role_id == role.ADMIN) {
         detail = await AdminModel.findOne({
           where: {
-            uid: user.id
-          }
+            uid: user.id,
+          },
         })
       } else if (user.role_id == role.HOME_CUSTOMER) {
         detail = await Home_Customer.findOne({
           where: {
-            uid: user.id
-          }
+            uid: user.id,
+          },
         })
       } else if (user.role_id == role.BUSINESS_CUSTOMER) {
         detail = await Business_Customer.findOne({
           where: {
-            uid: user.id
-          }
+            uid: user.id,
+          },
         })
       }
       if (!detail) return false
@@ -132,11 +130,11 @@ class Auth extends BaseService {
        */
       const [accesses, metadata] = await sequelize.query(`select type from access_roles join accesses on aid = accesses.type where rid = ${user.role_id};`)
       const auth = Array.from(accesses).map((ac: any) => ac.type)
-      const res = omitFields({...user.dataValues, ...detail.dataValues}, ['password'])
+      const res = omitFields({ ...user.dataValues, ...detail.dataValues }, ['password'])
 
       return {
         ...res,
-        auth
+        auth,
       }
     } catch (error) {
       return false

@@ -1,11 +1,11 @@
-import BaseService from "./BaseService"
+import BaseService from './BaseService'
 
 const models = require('../../db/models')
 const { State, Business_Type, Region } = models
 
 class Config extends BaseService {
 
-  constructor() {
+  constructor () {
     super()
   }
 
@@ -21,8 +21,8 @@ class Config extends BaseService {
     try {
       return await State.findAll({
         where: {
-          region_id: region_id
-        }
+          region_id: region_id,
+        },
       })
     } catch (error) {
       return false
