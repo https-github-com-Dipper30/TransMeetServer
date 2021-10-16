@@ -34,6 +34,7 @@ export enum errCode {
   PAGE_NOT_FOUND = 40004,
   DATABASE_ERROR = 40005,
   DATABASE_TRANSACTION_ERROR = 40006,
+  INVALID_ID = 40007,
 
   // transaction error
   ORDER_ERROR = 50000,

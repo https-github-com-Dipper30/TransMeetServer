@@ -41,7 +41,7 @@ export const omitFields = (rawData: any, attrsToOmit: string[] = attrs): ThisTyp
   }
 }
 
-export const encryptMD5 = (plainText: string) => {
+export const encryptMD5 = (plainText: string): string => {
   return crypto.createHash('md5').update(plainText).update(MD5_PRIVATE_KEY).digest('hex')
 }
 
@@ -50,14 +50,23 @@ export const encryptMD5 = (plainText: string) => {
  * @param {any} p  
  * @returns 
  */
-export const isError = (p: any) => {
+export const isError = (p: any): boolean => {
   return p instanceof BaseException || p instanceof Error
+}
+
+/**
+ * check if the parameter is an instance of Error
+ * @param {any} p  
+ * @returns boolean
+ */
+export const queryIsNull = (p: any): boolean => {
+  return p == null || p == 'null'
 }
 
 /**
  * create an object including all criteria for dynamic searching
  * @param {object} o
- * @returns {object} criteria for where matching
+ * @returns {object} criteria for 'where' clause
  */
 
 export const createCriteria = (o: any, attrs?: string[]|null) => {
@@ -67,7 +76,7 @@ export const createCriteria = (o: any, attrs?: string[]|null) => {
   // if the attribute does not exist in object, ignore it
   if (attrs) {
     for (let attribute of attrs) {
-      if (o.hasOwnProperty(attribute) && !criteria.hasOwnProperty(attribute)) {
+      if (o.hasOwnProperty(attribute) && !queryIsNull(o[attribute]) && !criteria.hasOwnProperty(attribute)) {
         Object.defineProperty(criteria, attribute, {
           value: o[attribute],
           enumerable: true,
@@ -77,7 +86,7 @@ export const createCriteria = (o: any, attrs?: string[]|null) => {
     }
   } else {
     for (let attribute in o) {
-      if (!criteria.hasOwnProperty(attribute)) {
+      if (!criteria.hasOwnProperty(attribute) && !queryIsNull(o[attribute])) {
         Object.defineProperty(criteria, attribute, {
           value: o[attribute],
           enumerable: true,

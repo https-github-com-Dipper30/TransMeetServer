@@ -1,10 +1,10 @@
-import { errCode } from "../config/errCode"
-import { ParameterException, StoreException } from "../exception"
-import { StoreType } from '../types/Service'
-import { StoreValidator } from "../validator"
-import BaseController from "./BaseController"
-import { StoreService } from "../service"
-
+import { errCode } from '../config/errCode'
+import { ParameterException, StoreException } from '../exception'
+import { GetStore, StoreType } from '../types/Service'
+import { StoreValidator } from '../validator'
+import BaseController from './BaseController'
+import { StoreService } from '../service'
+import { isError } from '../utils/tools'
 class Store extends BaseController {
 
   constructor () {
@@ -23,7 +23,27 @@ class Store extends BaseController {
 
       res.json({
         code: 201,
-        msg: 'Store Created!'
+        msg: 'Store Created!',
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getStore (req: any, res: any, next: any) {
+    try {
+      const query: any = req.query
+      const valid = new StoreValidator(query)
+      const data = valid.checkGet()
+      if (!data) throw new ParameterException()
+
+      console.log(data)
+      const stores: any = await StoreService.getStore(data)
+      if (isError(stores)) throw stores
+
+      res.json({
+        code: 200,
+        data: stores,
       })
     } catch (error) {
       next(error)

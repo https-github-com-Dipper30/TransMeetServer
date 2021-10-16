@@ -118,6 +118,13 @@ class Staff extends BaseService {
     }
   }
 
+  /**
+   * dynamic query criteria
+   * 1-id 2-region_assigned 3-store_assigned
+   * 3-job_title 4-salary staff who have a salary beneath certain amount
+   * @param {GetStaff} query
+   * @returns an exception or an array of results
+   */
   async getStaff (query: GetStaff) {
     const criteria: Object = createCriteria(query, ['id', 'region_assigned', 'store_assigned', 'job_title', 'salary'])
     if (criteria.hasOwnProperty('salary')) {
@@ -127,19 +134,22 @@ class Staff extends BaseService {
         },
       })
     }
+    try {
+      const staff = await StaffModel.findAll({
+        where: criteria,
+        order: [
+          ['job_title', 'DESC'],
+          ['salary', 'DESC'],
+          ['region_assigned'],
+          ['store_assigned'],
+        ],
+      })
+      if (!staff) return new StaffException(errCode.STAFF_ERROR)
 
-    const staff = await StaffModel.findAll({
-      where: criteria,
-      order: [
-        ['job_title', 'DESC'],
-        ['salary', 'DESC'],
-        ['region_assigned'],
-        ['store_assigned'],
-      ],
-    })
-    if (!staff) return new StaffException(errCode.STAFF_ERROR)
-
-    return staff
+      return staff
+    } catch (error) {
+      return new DatabaseException()
+    }
   }
 
 }

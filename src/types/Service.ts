@@ -7,3 +7,10 @@ export interface StoreType {
   state_id: number,
   zip_code: number,
 }
+
+export interface GetStore {
+  id?: number,
+  manager_id?: number,
+  region_id?: number,
+  state_id?: number,
+}

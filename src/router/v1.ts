@@ -4,6 +4,7 @@ import {
   ConfigController,
   StoreController,
 } from '../controller/index'
+import StaffController from '../controller/StaffController'
 
 const router: Router = Router()
 
@@ -15,11 +16,14 @@ router.post('/login', AuthController.login)
 router.get('/states', ConfigController.getStates)
 router.get('/businessTypes', ConfigController.getBusinessTypes)
 router.get('/regions', ConfigController.getRegions)
-router.post('/staff', ConfigController.addStaff)
-router.get('/staff', ConfigController.getStaff)
+
+// staff
+router.post('/staff', StaffController.addStaff)
+router.get('/staff', StaffController.getStaff)
 
 // store
 router.post('/store', StoreController.addStore)
+router.get('/store', StoreController.getStore)
 
 // account
 // router.post('/checkAccount', AccountController.checkAccount)
