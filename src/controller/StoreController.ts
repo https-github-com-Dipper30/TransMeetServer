@@ -69,6 +69,25 @@ class Store extends BaseController {
     }
   }
 
+  async deleteStore (req: any, res: any, next: any) {
+    try {
+      const query: any = req.query
+      const valid = new StoreValidator(query)
+      const data = valid.checkID()
+      if (!data) throw new ParameterException()
+
+      const stores: any = await StoreService.deleteStore(data)
+      if (isError(stores)) throw stores
+
+      res.json({
+        code: 200,
+        msg: 'deleted',
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 export default new Store()

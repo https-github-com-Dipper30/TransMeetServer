@@ -15,6 +15,7 @@ export enum businessType {
 }
 
 export enum jobTitle {
+  UNASSIGNED = -1,
   SALESPERSON = 1,
   STORE_MANAGER = 2,
   REGION_MANAGER = 3

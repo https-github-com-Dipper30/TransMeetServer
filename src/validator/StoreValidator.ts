@@ -46,4 +46,15 @@ export default class StoreValidator extends BaseValidator {
     ]
     return this.checkParams(this.params, sRule)
   }
+
+  checkID (): Boolean {
+    const { id } = this.params
+    const iRule = [
+      'id|required|number',
+    ]
+    this.params = this.checkQuery(this.params, iRule)
+    // if (!this.isPositiveInteger(this.params.id)) return false
+    return this.params
+  }
+
 }

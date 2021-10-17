@@ -1,7 +1,7 @@
 import BaseService from './BaseService'
 import { StoreType, GetStore, SetStoreManager } from '../types/Service'
 import { createCriteria, isError } from '../utils/tools'
-import { ConfigException, DatabaseException, StoreException } from '../exception'
+import { ConfigException, DatabaseException, ParameterException, StoreException } from '../exception'
 import { errCode } from '../config'
 import StaffException from '../exception/StaffException'
 import { Staff as StaffType } from '../types/User'
@@ -198,6 +198,35 @@ class Store extends BaseService {
       if (staff) staff.job_title = title
       await staff.save()
 
+      return true
+    } catch (error) {
+      await t.rollback()
+      return error
+    }
+  }
+
+  async deleteStore (p: any) {
+    const { id } = p
+    const t = await sequelize.transaction()
+
+    if (!id) throw new ParameterException()
+    console.log('id!!', id)
+    try {
+      const store = await StoreModel.findByPk(id, { transaction: t })
+      if (!store) throw new StoreException(errCode.STORE_NOT_FOUND, 'Store does not exist...')
+
+      const { manager_id } = store
+      // if store has a manager, set his/her job_title to -1
+      if (manager_id) {
+        const staff = await StaffModel.findByPk(manager_id, { transaction: t })
+        if (staff) {
+          staff.job_title = jobTitle.UNASSIGNED
+        }
+        await staff.save()
+      }
+
+      await store.destroy()
+      await t.commit()
       return true
     } catch (error) {
       await t.rollback()
