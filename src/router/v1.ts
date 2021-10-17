@@ -24,6 +24,7 @@ router.get('/staff', StaffController.getStaff)
 // store
 router.post('/store', StoreController.addStore)
 router.get('/store', StoreController.getStore)
+router.post('/setStoreManager', StoreController.setManager)
 
 // account
 // router.post('/checkAccount', AccountController.checkAccount)

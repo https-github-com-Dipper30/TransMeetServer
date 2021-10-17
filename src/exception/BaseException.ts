@@ -38,6 +38,9 @@ class BaseException extends Error implements Exception {
     [errCode.TOKEN_ERROR]: 'Oops! Something seems wrong with your token...',
     [errCode.ACCESS_ERROR]: 'Oops! You are not authorized...',
     [errCode.AUTH_ERROR]: 'Auth Error!',
+    [errCode.STAFF_NOT_FOUND]: 'State Not Found.',
+    [errCode.DUPLICATE_STORE_NAME]: 'Oops, this name exits already.',
+    [errCode.TRANSACTION_ERROR]: 'Database Transaction Error',
   }
 
   constructor (code: number = 500, message?: string|null|undefined) {

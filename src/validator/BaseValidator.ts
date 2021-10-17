@@ -39,7 +39,7 @@ class BaseValidator implements Validator {
             break
           case 'string': 
             if ( typeof params[key] != 'string' ) return false
-            break;
+            break
           case 'boolean': 
             if ( !validator.isBoolean(params[key]) ) return false
             break
@@ -145,7 +145,7 @@ class BaseValidator implements Validator {
 
   // check zip code, 5-digit long
   isZipCode (code: any): Boolean {
-    return Boolean(code) && typeof code == 'number' && code.toString.length == 5
+    return Boolean(code) && typeof code == 'number' && code.toString().length == 5
   }
 
   // check if the number is between min and max

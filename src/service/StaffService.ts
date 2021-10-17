@@ -23,6 +23,7 @@ class Staff extends BaseService {
   }
 
   async addStaff (staff: StaffType) {
+    const t = await sequelize.transaction() 
     try {
       // if two staff are both salesperson in the same store, their names can't the same
       // there is only one store manager or region manager and the staff can only be assigned by one job title
@@ -49,29 +50,29 @@ class Staff extends BaseService {
         if (staff.job_title == jobTitle.STORE_MANAGER) {
           if (store.manager_id) throw new ConfigException(errCode.STORE_ALREADY_HAS_MANAGER)
           // insert store manager
-          return await this.insertStoreManager(staff, store)
+          return await this.insertStoreManager(staff, store, t)
         }
 
         // 4. if the staff is a salesperson, then make sure there are no duplicate names in the same store
         if (staff.job_title == jobTitle.SALESPERSON) {
           // insert salesperson
-          return await this.insertSalesPerson(staff)
+          return await this.insertSalesPerson(staff, t)
         }
       } else {
         // 5. if the staff is a region manager, we need to make sure the region does not have a manager already
         if (region.manager_id) throw new ConfigException(errCode.REGION_ALREADY_HAS_MANAGER)
         // insert region manager
-        return await this.insertRegionManager(staff, region)
+        return await this.insertRegionManager(staff, region, t)
       }
-      return false
+      await t.commit()
+      return true
     } catch (error) {
+      await t.rollback()
       return error
     }
   }
 
-  async insertRegionManager (staff: StaffType, region: any) {
-
-    const t = await sequelize.transaction()
+  async insertRegionManager (staff: StaffType, region: any, t: any) {
     try {
       const s = await StaffModel.create(staff, { transaction: t })
       region.manager_id = s.id
@@ -85,9 +86,7 @@ class Staff extends BaseService {
     }
   }
 
-  async insertStoreManager (staff: StaffType, store: any) {
-
-    const t = await sequelize.transaction()
+  async insertStoreManager (staff: StaffType, store: any, t: any) {
     try {
       const s = await StaffModel.create(staff, { transaction: t })
       store.manager_id = s.id
@@ -100,8 +99,7 @@ class Staff extends BaseService {
     }
   }
 
-  async insertSalesPerson (staff: StaffType) {
-    const t = await sequelize.transaction()
+  async insertSalesPerson (staff: StaffType, t: any) {
     try {
       const [res, created] = await StaffModel.findOrCreate({
         where: {
@@ -109,12 +107,15 @@ class Staff extends BaseService {
           store_assigned: staff.store_assigned,
         },
         defaults: staff,
+        transaction: t,
       })
-      if (!created) return new StaffException(errCode.STAFF_ALREADY_EXISTS)
+      if (!created) throw new StaffException(errCode.STAFF_ALREADY_EXISTS)
+      await t.commit()
+      return true
     } catch (error) {
       // something wrong
       await t.rollback()
-      return new DatabaseException(errCode.TRANSACTION_ERROR)
+      return error
     }
   }
 

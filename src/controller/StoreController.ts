@@ -1,6 +1,6 @@
 import { errCode } from '../config/errCode'
 import { ParameterException, StoreException } from '../exception'
-import { GetStore, StoreType } from '../types/Service'
+import { GetStore, SetStoreManager, StoreType } from '../types/Service'
 import { StoreValidator } from '../validator'
 import BaseController from './BaseController'
 import { StoreService } from '../service'
@@ -19,7 +19,8 @@ class Store extends BaseController {
       if (!valid.goCheck()) throw new ParameterException()
 
       const created = await StoreService.addStore(data)
-      if (created === false) throw new StoreException(errCode.STORE_ALREADY_EXISTS)
+      if (created === false) throw new StoreException()
+      if (isError(created)) throw created
 
       res.json({
         code: 201,
@@ -44,6 +45,24 @@ class Store extends BaseController {
       res.json({
         code: 200,
         data: stores,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async setManager (req: any, res: any, next: any) {
+    try {
+      const data: SetStoreManager = req.body
+      const valid = new StoreValidator(data)
+      if (!valid.checkSetManager()) throw new ParameterException()
+
+      const stores: any = await StoreService.setManager(data)
+      if (isError(stores)) throw stores
+
+      res.json({
+        code: 201,
+        msg: 'success',
       })
     } catch (error) {
       next(error)

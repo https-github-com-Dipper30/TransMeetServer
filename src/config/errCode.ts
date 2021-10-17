@@ -19,8 +19,8 @@ export enum errCode {
   STAFF_NOT_FOUND = 20009,
   REGION_ALREADY_EXISTS = 20010,
   STAFF_ALREADY_EXISTS = 20011,
-
-  
+  STAFF_ALREADY_HAS_JOB = 20012,
+  STATE_NOT_FOUND = 20013,
 
   // product error code
   PRODUCT_ERROR = 30000,
@@ -50,6 +50,7 @@ export enum errCode {
   // store error code
   STORE_ERROR = 70000,
   STORE_ALREADY_EXISTS = 70001,
+  DUPLICATE_STORE_NAME = 70002,
 
   // product error code
 

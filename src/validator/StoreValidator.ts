@@ -9,7 +9,7 @@ export default class StoreValidator extends BaseValidator {
 
   // type check
   rules = [
-    'manager_id|number|required|allowNull',
+    'manager_id|number|allowNull',
     'region_id|number|required',
     'name|string|required',
     'street|string|required',
@@ -37,5 +37,13 @@ export default class StoreValidator extends BaseValidator {
     this.params = this.checkQuery(this.params, gRule)
     // if (!this.attrsAreIDs(this.params, ['id', 'manager_id', 'region_id', 'state_id'])) return new ParameterException(errCode.INVALID_ID)
     return this.params
+  }
+
+  checkSetManager (): Boolean {
+    const sRule = [
+      'manager_id|number|required',
+      'store_id|number|required',
+    ]
+    return this.checkParams(this.params, sRule)
   }
 }
