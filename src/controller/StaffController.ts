@@ -1,8 +1,8 @@
 import { errCode } from '../config'
-import { DatabaseException, ParameterException } from '../exception'
+import { DatabaseException, ParameterException, TokenException } from '../exception'
 import BaseController from './BaseController'
 import { GetStaff, Staff as StaffType } from '../types/User'
-import { StaffService } from '../service'
+import { StaffService, TokenService } from '../service'
 import StaffValidator from '../validator/StaffValidator'
 import { isError } from '../utils/tools'
 
@@ -40,11 +40,15 @@ class Staff extends BaseController {
   // dynamic criteria { id || region_assigned || store_assigned || job_title }
   async getStaff (req: any, res: any, next: any): Promise<any> {
     try {
+      // const Token = new TokenService(req.headers.token)
+      // if (!Token.verifyToken()) throw new TokenException()
+      
       const query: GetStaff = req.query
       const valid = new StaffValidator(query)
       const data = valid.checkGet()
       if (!data) throw new ParameterException()
 
+      // console.log('dd',data)
       const staff = await StaffService.getStaff(data)
       if (isError(staff)) throw staff
 

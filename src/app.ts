@@ -30,6 +30,24 @@ app.all('*', async (req: any, res: any, next: any) => {
 	}
 })
 
+// check token
+// app.use('/', async (req: any, res: any, next: any) => {
+//   console.log(req.url)
+//   // if ( tokenFreeUrls.includes(req.url) ) {
+//   //   next()
+//   //   return
+//   // }
+//   const token = String(req.headers.token)
+//   if ( !token || token == 'undefined' ) {
+//     res.status(200).json({
+//       code: 10002,
+//       msg: 'Token Failure',
+//     })
+//   } else {
+//     next()
+//   }
+// })
+
 console.log(process.env.BASE_URL)
 
 router(app)

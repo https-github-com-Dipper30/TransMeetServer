@@ -4,10 +4,8 @@ import { jobTitle } from '../config/common'
 import { ConfigException, DatabaseException, StoreException } from '../exception'
 import { errCode } from '../config/errCode'
 import StaffException from '../exception/StaffException'
-import { Transaction } from 'sequelize/types'
 import { createCriteria } from '../utils/tools'
-import Sequelize from 'sequelize'
-const Op = Sequelize.Op
+import { Op } from 'sequelize'
 const { sequelize } = require('../../db/models')
 const models = require('../../db/models')
 const { 

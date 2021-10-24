@@ -19,7 +19,7 @@ export const enumIncludes = (enumType: any, el: any): Boolean => Object.values(e
 /**
  * to filter unwanted fields in an array or an object
  * @param {object} rawData data that needs filtering
- * @param attrsToOmit attributes that are unwanted
+ * @param {string[]} attrsToOmit attributes that are unwanted
  * @returns data after filtering
  */
 export const omitFields = (rawData: any, attrsToOmit: string[] = attrs): ThisType<any> => {
@@ -55,7 +55,7 @@ export const isError = (p: any): boolean => {
 }
 
 /**
- * check if the parameter is an instance of Error
+ * check if the parameter is an instance of null
  * @param {any} p  
  * @returns boolean
  */
@@ -68,7 +68,6 @@ export const queryIsNull = (p: any): boolean => {
  * @param {object} o
  * @returns {object} criteria for 'where' clause
  */
-
 export const createCriteria = (o: any, attrs?: string[]|null) => {
   if (!(o instanceof Object)) return {}
   let criteria = {}
@@ -81,6 +80,7 @@ export const createCriteria = (o: any, attrs?: string[]|null) => {
           value: o[attribute],
           enumerable: true,
           writable: true,
+          configurable: true, // can be removed
         })
       }
     }
@@ -91,9 +91,18 @@ export const createCriteria = (o: any, attrs?: string[]|null) => {
           value: o[attribute],
           enumerable: true,
           writable: true,
+          configurable: true,
         })
       }
     }
   }
   return criteria
+}
+
+/**
+ * get current unix timestamp
+ * @returns current unix timestamp
+ */
+export const getUnixTS = (): number => {
+  return Math.floor(new Date().getTime() / 1000)
 }

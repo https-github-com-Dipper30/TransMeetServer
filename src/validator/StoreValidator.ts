@@ -1,7 +1,7 @@
-import { errCode } from "../config"
-import { DatabaseException, ParameterException } from "../exception"
+import { errCode } from '../config'
+import { DatabaseException, ParameterException } from '../exception'
 
-const BaseValidator = require("./BaseValidator")
+const BaseValidator = require('./BaseValidator')
 const role = require('../config/auth')
 const validator = require('validator')
 

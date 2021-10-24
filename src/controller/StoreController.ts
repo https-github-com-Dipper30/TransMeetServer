@@ -38,7 +38,6 @@ class Store extends BaseController {
       const data = valid.checkGet()
       if (!data) throw new ParameterException()
 
-      console.log(data)
       const stores: any = await StoreService.getStore(data)
       if (isError(stores)) throw stores
 

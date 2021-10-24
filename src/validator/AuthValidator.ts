@@ -1,4 +1,4 @@
-const BaseValidator = require("./BaseValidator")
+const BaseValidator = require('./BaseValidator')
 const role = require('../config/auth')
 const validator = require('validator')
 
@@ -8,7 +8,7 @@ export default class AuthValidator extends BaseValidator {
   rules = [
     'username|string|required|allowNull',
     'password|string|required',
-    'role_id|number|required'
+    'role_id|number|required',
   ]
 
   constructor (params: any) {
@@ -28,7 +28,7 @@ export default class AuthValidator extends BaseValidator {
         'street|string|required',
         'city|string|required',
         'state_id|number|required',
-        'zip_code|number|required'
+        'zip_code|number|required',
       ]
       return this.checkParams(this.params, hRule)
     } else if (role_id == role.BUSINESS_CUSTOMER) {
@@ -39,12 +39,12 @@ export default class AuthValidator extends BaseValidator {
         'city|string|required',
         'state_id|number|required',
         'zip_code|number|required',
-        'cate|number|required'
+        'cate|number|required',
       ]
       return this.checkParams(this.params, bRule) && this.isShortName(this.params.name)
     } else if (role_id == role.ADMIN) {
       const aRule = [
-        'name|string|required'
+        'name|string|required',
       ]
       return this.checkParams(this.params, aRule) && this.isShortName(this.params.name)
     }
@@ -54,7 +54,7 @@ export default class AuthValidator extends BaseValidator {
   checkAccountParam (): Boolean {
     const aRule = [
       'username|string|required',
-      'password|string|required'
+      'password|string|required',
     ]
     return this.checkParams(this.params, aRule)
   }
@@ -62,7 +62,7 @@ export default class AuthValidator extends BaseValidator {
   // check if username is valid
   checkUsername (): Boolean {
     const uRule = [
-      'username|string|required'
+      'username|string|required',
     ]
     return this.checkParams(this.params, uRule)
   }

@@ -1,10 +1,10 @@
-import BaseController from "./BaseController"
+import BaseController from './BaseController'
 import { User, HomeCustomer, Admin, BusinessCustomer } from '../types/User'
 import { Validator, Account } from '../types/common'
 import { AuthException, ParameterException, UserException, DatabaseException } from '../exception'
-import { errCode } from '../config/errCode'
+import { errCode } from '../config'
 import { AuthValidator } from '../validator'
-import { AuthService, TokenService } from "../service"
+import { AuthService, TokenService } from '../service'
 
 class Auth extends BaseController {
   constructor () {
@@ -55,7 +55,7 @@ class Auth extends BaseController {
       if (!user) throw new AuthException(errCode.LOGIN_ERROR)
 
       // logged in, return a token
-      const t = new TokenService(user.id)
+      const t = new TokenService({ userID: user.id, auth: user.auth })
       const token = t.generateToken()
 
       res.json({

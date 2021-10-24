@@ -127,7 +127,7 @@ class Store extends BaseService {
     const criteria: Object = createCriteria(query, ['id', 'manager_id', 'region_id', 'state_id'])
 
     try {
-      const staff = await StoreModel.findAll({
+      const stores = await StoreModel.findAll({
         where: criteria,
         order: [
           ['region_id'],
@@ -135,9 +135,9 @@ class Store extends BaseService {
           ['name'],
         ],
       })
-      if (!staff) return new StoreException(errCode.STAFF_ERROR)
+      if (!stores) return new StoreException(errCode.STORE_ERROR)
 
-      return staff
+      return stores
     } catch (error) {
       return new DatabaseException()
     }
@@ -210,7 +210,6 @@ class Store extends BaseService {
     const t = await sequelize.transaction()
 
     if (!id) throw new ParameterException()
-    console.log('id!!', id)
     try {
       const store = await StoreModel.findByPk(id, { transaction: t })
       if (!store) throw new StoreException(errCode.STORE_NOT_FOUND, 'Store does not exist...')

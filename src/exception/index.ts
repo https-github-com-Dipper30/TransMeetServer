@@ -4,6 +4,7 @@ import UserException from './UserException'
 import DatabaseException from './DatabaseException'
 import StoreException from './StoreException'
 import ConfigException from './ConfigException'
+import TokenException from './TokenException'
 
 export {
   AuthException,
@@ -12,4 +13,5 @@ export {
   DatabaseException,
   StoreException,
   ConfigException,
+  TokenException,
 }

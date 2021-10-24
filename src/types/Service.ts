@@ -19,3 +19,30 @@ export interface SetStoreManager {
   manager_id: number,
   store_id: number,
 }
+
+export interface ProductType {
+  name: string,
+  amount: number,
+  price: number,
+  cate: number,
+  type: number,
+  description?: string,
+  createTS: number,
+  listTS?: number|null,
+  imgSrc?: string|null,
+}
+
+export interface ListProduct {
+  pid: number,
+  sid: number[],
+}
+
+export interface GetProduct {
+  cate?: number,
+  type?: number,
+  pid?: number,
+  sid?: number,
+  price?: number,
+  listed?: boolean,
+  available?: boolean,
+}

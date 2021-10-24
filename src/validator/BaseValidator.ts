@@ -46,6 +46,9 @@ class BaseValidator implements Validator {
           case 'date':
             if ( !validator.isDate(params[key]) ) return false
             break
+          case 'array':
+            if (!Array.isArray(params[key])) return false
+            break
           case 'timestamp':
             if ( !this.isTimeStamp(params[key]) ) return false
             break
@@ -95,7 +98,7 @@ class BaseValidator implements Validator {
             break
           case 'boolean': 
             if ( !validator.isBoolean(params[key]) && this.stringIsBoolean(params[key]) ) return false
-            params[key] = Boolean(params[key])
+            params[key] = params[key] == 'false' ? false : true
             break
           case 'timestamp':
             if ( !this.stringIsNumeric(params[key]) ) return false

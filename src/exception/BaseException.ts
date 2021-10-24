@@ -1,5 +1,5 @@
-import { errCode } from "../config/errCode"
-import { Exception, ExceptionConfig } from "../types/common"
+import { errCode } from '../config/errCode'
+import { Exception, ExceptionConfig } from '../types/common'
 
 // Two ways to create an instance of a new Exception
 // 1. new XXXException(code)
@@ -41,6 +41,12 @@ class BaseException extends Error implements Exception {
     [errCode.STAFF_NOT_FOUND]: 'State Not Found.',
     [errCode.DUPLICATE_STORE_NAME]: 'Oops, this name exits already.',
     [errCode.TRANSACTION_ERROR]: 'Database Transaction Error',
+    [errCode.PRODUCT_ERROR]: 'Product Error!',
+    [errCode.PRODUCT_NOT_FOUND]: 'Product Not Found!',
+    [errCode.PRODUCT_SOLD_OUT]: 'Product Sold Out!',
+    [errCode.PRODUCT_EXISTS]: 'Ah...Product already exists!',
+    [errCode.PRODUCT_ALREADY_LISTED]: 'Product already listed.',
+    [errCode.PRODUCT_NOT_YET_LISTED]: 'Sorry, the product is not available now...',
   }
 
   constructor (code: number = 500, message?: string|null|undefined) {
