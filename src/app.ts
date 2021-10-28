@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const router = require('./router/index.ts')
 const fs = require('fs')
-const index = fs.readFileSync('./dist/index.html')
 
 import { Exception } from './types/common'
 // import config from './config'
@@ -23,10 +22,20 @@ app.get('*', async (req: any, res: any, next: any) => {
   // if (req.url)
   
   if(req.url.substr(0, 4) != '/api') {
-    res.writeHead(200, {
-      'Content-Type': 'text/html',
+    // res.writeHead(200, {
+    //   'Content-Type': 'text/html',
+    // })
+    
+    // res.end('dist/index.html')
+    fs.readFile('dist/index.html', function (err: any, data: any) {
+      if (err) {
+        res.writeHead(404)
+        res.end(JSON.stringify(err))
+        return
+      }
+      res.writeHead(200)
+      res.end(data)
     })
-    res.end('dist/index.html')
   }
   else next()
 })
