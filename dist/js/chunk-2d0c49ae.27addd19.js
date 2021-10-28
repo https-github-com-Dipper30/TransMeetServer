@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0c49ae"],{"3c19":function(n,e,c){"use strict";c.r(e);var t=c("7a23");function o(n,e,c,o,a,i){return Object(t["openBlock"])(),Object(t["createElementBlock"])("div",null,"This is Admin Page")}var a={},i=c("d959"),r=c.n(i);const d=r()(a,[["render",o]]);e["default"]=d}}]);
+//# sourceMappingURL=chunk-2d0c49ae.27addd19.js.map
