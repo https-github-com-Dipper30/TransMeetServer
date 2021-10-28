@@ -11,7 +11,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('stores', [
+    await queryInterface.bulkInsert('Stores', [
       {
         manager_id: 1,
         name: 'Jane eyre',
@@ -113,7 +113,7 @@ module.exports = {
         region_id: 1
       }
     ], {})
-    await queryInterface.bulkInsert('staffs', [
+    await queryInterface.bulkInsert('Staffs', [
       {
         name: 'Rose',
         job_title: 2,
@@ -396,5 +396,10 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+     await queryInterface.bulkDelete('Stores', null, {})
+     await queryInterface.bulkDelete('Staffs', null, {})
+     await queryInterface.bulkDelete('States', null, {})
+     await queryInterface.bulkDelete('Regions', null, {})
+     await queryInterface.bulkDelete('Business_Types', null, {})
   }
 };

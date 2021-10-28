@@ -128,7 +128,7 @@ class Auth extends BaseService {
        * get access
        * select name from access_roles join accesses on aid = accesses.type where rid = user.role_id;
        */
-      const [accesses, metadata] = await sequelize.query(`select type from access_roles join accesses on aid = accesses.type where rid = ${user.role_id};`)
+      const [accesses, metadata] = await sequelize.query(`select type from Access_Roles join Accesses on aid = Accesses.type where rid = ${user.role_id};`)
       const auth = Array.from(accesses).map((ac: any) => ac.type)
       const res = omitFields({ ...user.dataValues, ...detail.dataValues }, ['password'])
 
