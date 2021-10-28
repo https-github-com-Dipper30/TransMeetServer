@@ -52,7 +52,7 @@ class Auth extends BaseController {
       if (!valid.checkAccountParam()) throw new ParameterException()
 
       const user: any = await AuthService.loginAccount(data)
-      if (!user) throw new AuthException(errCode.LOGIN_ERROR)
+      if (!user) throw new AuthException(errCode.LOGIN_ERROR, 'Wrong Username or Password I Guess...')
 
       // logged in, return a token
       const t = new TokenService({ userID: user.id, auth: user.auth })

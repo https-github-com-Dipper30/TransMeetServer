@@ -14,28 +14,40 @@ module.exports = {
    
     await queryInterface.bulkInsert('Accesses', [
       {
-        name: 'browse products',
+        name: 'log in main',
         type: 1,
       },
       {
-        name: 'buy products',
+        name: 'browse products',
         type: 2,
       },
       {
-        name: 'browse comments',
+        name: 'read products',
         type: 3,
       },
       {
-        name: 'make comments',
+        name: 'buy products',
         type: 4,
       },
       {
-        name: 'login main',
+        name: 'make comments',
         type: 5,
       },
       {
-        name: 'login cms',
-        type: 6,
+        name: 'log in admin',
+        type: 11,
+      },
+      {
+        name: 'access business data',
+        type: 12,
+      },
+      {
+        name: 'access region data',
+        type: 13,
+      },
+      {
+        name: 'access store data',
+        type: 14,
       },
     ], {})
     await queryInterface.bulkInsert('Roles', [
@@ -95,9 +107,34 @@ module.exports = {
       },
       {
         rid: 99,
-        aid: 6
+        aid: 11
+      },
+      {
+        rid: 99,
+        aid: 12
+      },
+      {
+        rid: 99,
+        aid: 13
+      },
+      {
+        rid: 99,
+        aid: 14
       }
     ], {})
+    // await queryInterface.bulkInsert('Users', [
+    //   {
+    //     username: 'admin',
+    //     password: '123456',
+    //     role_id: 99,
+    //   }
+    // ], {})
+    // await queryInterface.bulkInsert('Admins', [
+    //   {
+    //     name: 'Admin',
+    //     uid: 1,
+    //   }
+    // ], {})
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -108,5 +145,9 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     await queryInterface.bulkDelete('Accesses', null, {})
+    await queryInterface.bulkDelete('Roles', null, {})
+    await queryInterface.bulkDelete('Access_Roles', null, {})
+    await queryInterface.bulkDelete('Users', null, {})
+    await queryInterface.bulkDelete('Admins', null, {})
   }
 };

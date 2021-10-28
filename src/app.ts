@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 const router = require('./router/index.ts')
+const fs = require('fs')
+const index = fs.readFileSync('./dist/index.html')
 
 import { Exception } from './types/common'
 // import config from './config'
@@ -15,6 +17,20 @@ import { Exception } from './types/common'
 app.use(express.json({ limit: '20mb' }))
 app.use(express.urlencoded({ extended: true }))
 
+app.use(express.static('dist'))
+
+app.get('*', async (req: any, res: any, next: any) => {
+  // if (req.url)
+  
+  if(req.url.substr(0, 4) != '/api') {
+    res.writeHead(200, {
+      'Content-Type': 'text/html',
+    })
+    res.end('dist/index.html')
+  }
+  else next()
+})
+
 app.all('*', async (req: any, res: any, next: any) => {
   const { origin, Origin, referer, Referer } = req.headers
   const allowOrigin = origin || Origin || referer || Referer || '*'
@@ -23,6 +39,7 @@ app.all('*', async (req: any, res: any, next: any) => {
 	res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
   res.header('Access-Control-Allow-Credentials', true) // with cookies
 	res.header('X-Powered-By', 'Express')
+ 
 	if (req.method == 'OPTIONS') {
   	res.sendStatus(200)
 	} else {

@@ -56,7 +56,7 @@ export default class AuthValidator extends BaseValidator {
       'username|string|required',
       'password|string|required',
     ]
-    return this.checkParams(this.params, aRule)
+    return this.checkParams(this.params, aRule) && this.params.password.length >= 6
   }
 
   // check if username is valid
