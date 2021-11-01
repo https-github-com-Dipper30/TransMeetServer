@@ -86,7 +86,7 @@ export const createCriteria = (o: any, attrs?: string[]|null) => {
     }
   } else {
     for (let attribute in o) {
-      if (!criteria.hasOwnProperty(attribute) && !queryIsNull(o[attribute])) {
+      if (!criteria.hasOwnProperty(attribute) && !queryIsNull(o[attribute]) && attribute != 'pager') {
         Object.defineProperty(criteria, attribute, {
           value: o[attribute],
           enumerable: true,
@@ -97,6 +97,29 @@ export const createCriteria = (o: any, attrs?: string[]|null) => {
     }
   }
   return criteria
+}
+
+/**
+ * parse pager from body into [limit, offset]
+ * @param query 
+ * @returns [limit, offset]
+ */
+export const getPager = (body: any) => {
+  if (!body.hasOwnProperty('pager')) {
+    return [1000000, 0]
+  }
+  const { pager } = body
+  const { page, size } = pager
+  const p = page || 1 // default 1
+  const s = size || 20 // default 20
+  return [s, (p - 1) * s]
+}
+
+export const getPagerFromQuery = (query: any) => {
+  const { page, size } = query
+  const p = page || 1 // default 1
+  const s = size || 20 // default 20
+  return [s, (p - 1) * s]
 }
 
 /**

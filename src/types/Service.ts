@@ -1,3 +1,4 @@
+import { Pager } from './common'
 export interface StoreType {
   manager_id?: number|null,
   region_id: number,

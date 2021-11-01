@@ -177,6 +177,21 @@ class BaseValidator implements Validator {
     return s == 'false' || s == 'true'
   }
 
+  // if the param does not include page, return true
+  // else if the param 
+  checkPager (p: any): Boolean {
+    if (!p.hasOwnProperty('pager')) return true
+    const { pager } = p
+    if (pager.hasOwnProperty('page')) {
+      if (!this.isPositiveInteger(pager.page)) return false
+    } else if (!pager.hasOwnProperty('size')) {
+      return false // no page and no size
+    } else {
+      return this.isPositiveInteger(pager.size)
+    }
+    return true
+  }
+
 }
 
 module.exports = BaseValidator

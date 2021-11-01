@@ -31,6 +31,8 @@ export default class StaffValidator extends BaseValidator {
       'store_assigned|number|allowNull',
       'job_title|number|allowNull',
       'salary|number|allowNull',
+      'page|number',
+      'size|number',
     ]
     return this.checkQuery(this.params, gRule)
   }

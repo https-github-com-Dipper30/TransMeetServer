@@ -12,6 +12,7 @@ const router: Router = Router()
 // auth
 router.post('/register', AuthController.register)
 router.post('/login', AuthController.login)
+router.post('/token', AuthController.getInfoByToken) // login using token
 
 // config
 router.get('/states', ConfigController.getStates)

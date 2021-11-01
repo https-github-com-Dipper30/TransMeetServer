@@ -1,3 +1,5 @@
+import { Pager } from './common'
+
 export interface User {
   username: string,
   password: string,
@@ -46,4 +48,6 @@ export interface GetStaff {
   store_assigned?: number|null,
   job_title?: number|null,
   salary?: number|null,
+  page?: number,
+  size?: number,
 }

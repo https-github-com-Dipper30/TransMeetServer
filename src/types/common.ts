@@ -15,7 +15,11 @@ export interface Account {
   password: string
 }
  
-
 export interface ExceptionConfig {
   [errCode: number]: string
+}
+
+export interface Pager {
+  page: number,
+  size?: number,
 }

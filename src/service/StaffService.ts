@@ -4,7 +4,7 @@ import { jobTitle } from '../config/common'
 import { ConfigException, DatabaseException, StoreException } from '../exception'
 import { errCode } from '../config/errCode'
 import StaffException from '../exception/StaffException'
-import { createCriteria } from '../utils/tools'
+import { createCriteria, getPagerFromQuery } from '../utils/tools'
 import { Op } from 'sequelize'
 const { sequelize } = require('../../db/models')
 const models = require('../../db/models')
@@ -125,7 +125,7 @@ class Staff extends BaseService {
    * @returns an exception or an array of results
    */
   async getStaff (query: GetStaff) {
-    const criteria: Object = createCriteria(query, ['id', 'region_assigned', 'store_assigned', 'job_title', 'salary'])
+    const criteria: any = createCriteria(query, ['id', 'region_assigned', 'store_assigned', 'job_title', 'salary'])
     if (criteria.hasOwnProperty('salary')) {
       Object.defineProperty(criteria, 'salary', {
         value: {
@@ -133,8 +133,16 @@ class Staff extends BaseService {
         },
       })
     }
+    if (criteria.hasOwnProperty('page')) {
+      delete criteria['page']
+    }
+    if (criteria.hasOwnProperty('size')) {
+      delete criteria['size']
+    }
+    const [limit, offset] = getPagerFromQuery(query)
+    console.log('chaxun', limit, offset)
     try {
-      const staff = await StaffModel.findAll({
+      const staff = await StaffModel.findAndCountAll({
         where: criteria,
         order: [
           ['job_title', 'DESC'],
@@ -142,6 +150,8 @@ class Staff extends BaseService {
           ['region_assigned'],
           ['store_assigned'],
         ],
+        limit,
+        offset,
       })
       if (!staff) return new StaffException(errCode.STAFF_ERROR)
 

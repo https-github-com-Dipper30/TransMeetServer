@@ -21,7 +21,7 @@ class Auth extends BaseService {
     super()
   } 
 
-  async findAccount (username: string): Promise<Boolean> {
+  async findAccountByUsername (username: string): Promise<Boolean> {
     try {
       //TODO ignore case
       const hasAccount = await UserModel.findOne({
@@ -30,6 +30,49 @@ class Auth extends BaseService {
         },
       })
       return Boolean(hasAccount)
+    } catch (error) {
+      return false
+    }
+  }
+
+  async findAccountByUserID (id: number): Promise<any> {
+    try {
+      const user = await UserModel.findByPk(id)
+      if (!user) return false
+      // get details from Home_Customer || Business_Customer || Admin_Customer
+      let detail: any
+      if (user.role_id == role.ADMIN) {
+        detail = await AdminModel.findOne({
+          where: {
+            uid: user.id,
+          },
+        })
+      } else if (user.role_id == role.HOME_CUSTOMER) {
+        detail = await Home_Customer.findOne({
+          where: {
+            uid: user.id,
+          },
+        })
+      } else if (user.role_id == role.BUSINESS_CUSTOMER) {
+        detail = await Business_Customer.findOne({
+          where: {
+            uid: user.id,
+          },
+        })
+      }
+      if (!detail) return false
+      /**
+       * get access
+       * select name from access_roles join accesses on aid = accesses.type where rid = user.role_id;
+       */
+      const [accesses, metadata] = await sequelize.query(`select type from Access_Roles join Accesses on aid = Accesses.type where rid = ${user.role_id};`)
+      const auth = Array.from(accesses).map((ac: any) => ac.type)
+      const res = omitFields({ ...user.dataValues, ...detail.dataValues }, ['password'])
+
+      return {
+        ...res,
+        auth,
+      }
     } catch (error) {
       return false
     }

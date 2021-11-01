@@ -8,7 +8,7 @@ class TokenException extends BaseException {
     [errCode.TOKEN_ERROR]: 'Token Error!',
   }
 
-  constructor (code: number = errCode.STORE_ERROR, message?: string|null|undefined) {
+  constructor (code: number = errCode.TOKEN_ERROR, message?: string|null|undefined) {
     super(code, message)
   }
 }
