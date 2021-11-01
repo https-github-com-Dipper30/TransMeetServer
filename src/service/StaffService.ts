@@ -140,7 +140,6 @@ class Staff extends BaseService {
       delete criteria['size']
     }
     const [limit, offset] = getPagerFromQuery(query)
-    console.log('chaxun', limit, offset)
     try {
       const staff = await StaffModel.findAndCountAll({
         where: criteria,
