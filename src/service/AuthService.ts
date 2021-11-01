@@ -39,6 +39,7 @@ class Auth extends BaseService {
     try {
       const user = await UserModel.findByPk(id)
       if (!user) return false
+
       // get details from Home_Customer || Business_Customer || Admin_Customer
       let detail: any
       if (user.role_id == role.ADMIN) {

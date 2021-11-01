@@ -55,7 +55,7 @@ class Auth extends BaseController {
       if (!user) throw new AuthException(errCode.LOGIN_ERROR, 'Wrong Username or Password I Guess...')
 
       // logged in, return a token
-      const t = new TokenService({ userID: user.id, auth: user.auth })
+      const t = new TokenService({ userID: user.uid, auth: user.auth })
       const token = t.generateToken()
 
       res.json({
