@@ -141,6 +141,10 @@ class Staff extends BaseService {
     }
     const [limit, offset] = getPagerFromQuery(query)
     try {
+      // TODO alias will cause error, why???
+      StaffModel.belongsTo(StoreModel, { foreignKey: 'store_assigned', targetKey: 'id' })
+      StaffModel.belongsTo(RegionModel, { foreignKey: 'region_assigned', targetKey: 'id' })
+
       const staff = await StaffModel.findAndCountAll({
         where: criteria,
         order: [
@@ -151,6 +155,18 @@ class Staff extends BaseService {
         ],
         limit,
         offset,
+        include: [
+          {
+            model: StoreModel,
+            // as: 'store',
+            attributes: ['name'],
+          },
+          {
+            model: RegionModel,
+            // as: 'region',
+            attributes: ['name'],
+          },
+        ],
       })
       if (!staff) return new StaffException(errCode.STAFF_ERROR)
 

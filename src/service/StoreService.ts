@@ -1,6 +1,6 @@
 import BaseService from './BaseService'
 import { StoreType, GetStore, SetStoreManager } from '../types/Service'
-import { createCriteria, isError } from '../utils/tools'
+import { createCriteria, isError, getPagerFromQuery } from '../utils/tools'
 import { ConfigException, DatabaseException, ParameterException, StoreException } from '../exception'
 import { errCode } from '../config'
 import StaffException from '../exception/StaffException'
@@ -125,14 +125,34 @@ class Store extends BaseService {
    */
   async getStore (query: GetStore) {
     const criteria: Object = createCriteria(query, ['id', 'manager_id', 'region_id', 'state_id'])
-
+    const [limit, offset] = getPagerFromQuery(query)
     try {
-      const stores = await StoreModel.findAll({
+      StoreModel.belongsTo(StateModel, { foreignKey: 'state_id', targetKey: 'id' } )
+      StoreModel.belongsTo(StaffModel, { foreignKey: 'manager_id', targetKey: 'id' } )
+      StoreModel.belongsTo(RegionModel, { foreignKey: 'region_id', targetKey: 'id' } )
+
+      const stores = await StoreModel.findAndCountAll({
         where: criteria,
         order: [
           ['region_id'],
           ['state_id'],
           ['name'],
+        ],
+        limit,
+        offset,
+        include: [
+          {
+            model: StateModel,
+            attributes: ['name'],
+          },
+          {
+            model: StaffModel,
+            attributes: ['name'],
+          },
+          {
+            model: RegionModel,
+            attributes: ['name'],
+          },
         ],
       })
       if (!stores) return new StoreException(errCode.STORE_ERROR)

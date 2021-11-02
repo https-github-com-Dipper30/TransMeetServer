@@ -27,6 +27,19 @@ create table role_access {
   aid: int foreign key access (id),
 }
 
+create table category {
+  id: int primary,
+  name: varchar(255),
+  code: int,
+}
+
+create table category {
+  id: int primary,
+  name: varchar(255),
+  code: int,
+  cate_code: int foreign key references category(code),
+}
+
 create table home_customer (
   id: int not null primary,
   marriage_status: int, 0-single 1-married 2-divorced

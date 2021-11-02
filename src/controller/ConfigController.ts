@@ -67,6 +67,37 @@ class Config extends BaseController {
     }
   }
 
+  async getCategories (req: any, res: any, next: any): Promise<any> {
+    try {
+      const categories = await ConfigService.getCategories()
+      if (isError(categories)) throw categories
+    
+      res.json({
+        code: 200,
+        data: categories,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getTypes (req: any, res: any, next: any): Promise<any> {
+    try {
+      const { query } = req
+      const code = Number(query.cate_code)
+      if (code && typeof code != 'number') throw new ParameterException()
+      const types = await ConfigService.getTypes(code)
+      if (isError(types)) throw types
+    
+      res.json({
+        code: 200,
+        data: types,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }
 
 export default new Config()

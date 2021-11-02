@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // Contacts.associate = function() {
+      //   app.model.Contacts.belongsTo(app.model.User,{foreignKey:"uid",as:'userInfo'});
+      //   app.model.Contacts.belongsTo(app.model.User,{foreignKey:"fid",as:'contactInfo'});
+      // }
     }
   };
   Staff.init({

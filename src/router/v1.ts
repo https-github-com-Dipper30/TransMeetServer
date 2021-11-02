@@ -18,14 +18,16 @@ router.post('/token', AuthController.getInfoByToken) // login using token
 router.get('/states', ConfigController.getStates)
 router.get('/businessTypes', ConfigController.getBusinessTypes)
 router.get('/regions', ConfigController.getRegions)
+router.get('/categories', ConfigController.getCategories)
+router.get('/types', ConfigController.getTypes)
 
 // staff
 router.post('/staff', StaffController.addStaff)
 router.get('/staff', StaffController.getStaff)
 
 // store
-router.post('/store', StoreController.addStore)
-router.get('/store', StoreController.getStore)
+router.post('/stores', StoreController.addStore)
+router.get('/stores', StoreController.getStore)
 router.get('/deleteStore', StoreController.deleteStore)
 router.post('/setStoreManager', StoreController.setManager)
 
@@ -35,6 +37,7 @@ router.get('/product', ProductController.getProduct)
 router.post('/list', ProductController.listProduct)
 router.post('/unlist', ProductController.unlistProduct)
 router.post('/deleteProduct', ProductController.deleteProduct)
+
 
 // account
 // router.post('/checkAccount', AccountController.checkAccount)

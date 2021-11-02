@@ -14,6 +14,8 @@ export interface GetStore {
   manager_id?: number,
   region_id?: number,
   state_id?: number,
+  page?: number,
+  size?: number,
 }
 
 export interface SetStoreManager {

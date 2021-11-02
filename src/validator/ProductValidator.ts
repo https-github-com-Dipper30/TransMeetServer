@@ -25,6 +25,8 @@ export default class ProductValidator extends BaseValidator {
     // if the staff is not a region manager, he/she must have a store_assigned value
     return this.checkParams(this.params, this.rules) 
     && this.isPositiveInteger(this.params.price)
+    && this.isBetween(this.params.cate, 1, 6)
+    && this.isBetween(this.params.type, 1, 6)
   }
 
   checkList (): Boolean {
