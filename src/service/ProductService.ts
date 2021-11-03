@@ -1,15 +1,18 @@
 import BaseService from './BaseService'
 import { GetProduct, ListProduct, ProductType } from '../types/Service'
-import { createCriteria, getUnixTS, isError } from '../utils/tools'
+import { createCriteria, getPagerFromQuery, getUnixTS, isError } from '../utils/tools'
 import { DatabaseException, ParameterException, StoreException } from '../exception'
 import { errCode } from '../config'
 import { Op } from 'sequelize'
 import ProductException from '../exception/ProductException'
+import FileService from './FileService'
 
 const models = require('../../db/models')
 const {
   Product: ProductModel,
   Product_Store: ProductStore,
+  Category: CategoryModel,
+  Type: TypeModel,
 } = models
 const { sequelize } = require('../../db/models')
 
@@ -151,11 +154,11 @@ class Product extends BaseService {
     const { listed, available, pid, sid } = criteria
 
     if (pid) {
-      criteria.id = { [Op.in]: [pid] }
+      criteria.id = query.pid
     } else if (sid) {
       const ps = await ProductStore.findAll({
         where: {
-          sid,
+          sid: query.sid,
         },
       })
       if (!ps) throw new ProductException(errCode.PRODUCT_ERROR, 'sid error')
@@ -174,10 +177,6 @@ class Product extends BaseService {
         },
       })
     }
-    if (criteria.hasOwnProperty('pid')) {
-      criteria.id = { [Op.eq]: query.pid }
-      delete criteria.pid
-    }
     if (criteria.hasOwnProperty('listed')) {
       delete criteria['listed']
       // find listed products
@@ -193,9 +192,22 @@ class Product extends BaseService {
       else criteria.amount = { [Op.eq]: 0 }
     }
 
+    if (criteria.hasOwnProperty('page')) {
+      delete criteria['page']
+    }
+    if (criteria.hasOwnProperty('size')) {
+      delete criteria['size']
+    }
+    if (criteria.hasOwnProperty('pic')) {
+      delete criteria['pic']
+    }
+    const [limit, offset] = getPagerFromQuery(query)
+    
     try {
       // TODO order by listed? available?
-      const products = await ProductModel.findAll({
+      ProductModel.belongsTo(CategoryModel, { foreignKey: 'cate', targetKey: 'code' })
+      ProductModel.belongsTo(TypeModel, { foreignKey: 'type', targetKey: 'code' })
+      const products = await ProductModel.findAndCountAll({
         where: criteria,
         order: [
           ['cate'],
@@ -203,9 +215,30 @@ class Product extends BaseService {
           ['price', 'DESC'],
           ['amount', 'DESC'],
         ],
+        limit,
+        offset,
+        include: [
+          {
+            model: CategoryModel,
+            attributes: ['name'],
+          },
+          {
+            model: TypeModel,
+            attributes: ['name'],
+          },
+        ],
       })
       if (!products) return new ProductException(errCode.PRODUCT_ERROR)
 
+      if (query.pic) {
+        // read image file
+        for (let product of products.rows) {
+          let p = product.dataValues
+          const images = await FileService.readProductImage(p.id)
+          if (images && images.length > 0) product.dataValues.imgList = images
+        }
+      }
+      
       return products
     } catch (error) {
       return new DatabaseException()

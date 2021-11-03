@@ -41,11 +41,15 @@ export interface ListProduct {
 }
 
 export interface GetProduct {
+  name?: number,
   cate?: number,
   type?: number,
   pid?: number,
   sid?: number,
   price?: number,
   listed?: boolean,
-  available?: boolean,
+  available?: boolean, // amount > 0
+  pic?: boolean, // if images are required
+  page?: number,
+  size?: number,
 }

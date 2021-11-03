@@ -1,10 +1,10 @@
 import BaseController from './BaseController'
 import { User, HomeCustomer, Admin, BusinessCustomer } from '../types/User'
 import { Validator, Account } from '../types/common'
-import { AuthException, ParameterException, UserException, DatabaseException, TokenException } from '../exception'
+import { AuthException, ParameterException, UserException, DatabaseException, TokenException, FileException } from '../exception'
 import { errCode } from '../config'
 import { ProductValidator } from '../validator'
-import { AuthService, TokenService } from '../service'
+import { AuthService, FileService, TokenService } from '../service'
 import { GetProduct, ListProduct, ProductType } from '../types/Service'
 import ProductService from '../service/ProductService'
 import { isError } from '../utils/tools'
@@ -105,6 +105,26 @@ class Product extends BaseController {
       res.json({
         code: 200,
         data: product,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getProductImage (req: any, res: any, next: any): Promise<any> {
+    try {
+      let query: { id: number } = req.query
+      const valid: ProductValidator = new ProductValidator(query)
+      if (!valid.checkGetImage()) throw new ParameterException()
+
+      const imgList = await FileService.readProductImage(Number(query.id))
+      if (!imgList || isError(imgList)) throw new FileException()
+
+      res.json({
+        code: 200,
+        data: {
+          imgList,
+        },
       })
     } catch (error) {
       next(error)

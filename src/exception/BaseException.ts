@@ -51,6 +51,7 @@ class BaseException extends Error implements Exception {
     [errCode.NO_FILE_UPLOADED]: 'No file is uploaded',
     [errCode.FILE_TYPE_ERROR]: 'File Type Error.',
     [errCode.DIR_BUILD_ERROR]: 'Directory Failure',
+    [errCode.DIR_NOT_EXISTS]: 'Directory Not Exists',
   }
 
   constructor (code: number = 500, message?: string|null|undefined) {

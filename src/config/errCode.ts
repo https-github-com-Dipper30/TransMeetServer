@@ -60,6 +60,7 @@ export enum errCode {
   NO_FILE_UPLOADED = 80001,
   FILE_TYPE_ERROR = 80002,
   DIR_BUILD_ERROR = 80003,
+  DIR_NOT_EXISTS = 80004,
   // product error code
 
 }

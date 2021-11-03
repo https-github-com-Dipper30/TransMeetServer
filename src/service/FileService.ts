@@ -110,6 +110,25 @@ class File extends BaseService {
     }
   }
 
+  async readProductImage (id: number) {
+    try {
+      const dir = `file/img/product/${id}`
+      if (!fs.existsSync(dir)) throw new FileException(errCode.DIR_NOT_EXISTS)
+      const files = fs.readdirSync(dir)
+      const res: any[] = []
+      files.forEach((item, index) => {
+        const path = dir + '/' + item
+        const type = item.split('.')[1]
+        const base64data = fs.readFileSync(path, { encoding: 'base64' })
+        res.push({ type, data: base64data })
+      })
+      return res
+    } catch (error) {
+      return false
+    }
+  
+  }
+
 }
 
 export default new File()

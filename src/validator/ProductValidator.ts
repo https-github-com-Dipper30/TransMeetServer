@@ -23,7 +23,14 @@ export default class ProductValidator extends BaseValidator {
     return this.checkParams(this.params, this.rules) 
     && this.isPositiveInteger(this.params.price)
     && this.isBetween(this.params.cate, 1, 6)
-    && this.isBetween(this.params.type, 1, 6)
+    && this.isBetween(this.params.type, 1, 36)
+  }
+
+  checkGetImage (): Boolean {
+    const iRule = [
+      'id|number',
+    ]
+    return this.checkQuery(this.params, iRule) && this.isPositiveInteger(this.params?.id)
   }
 
   checkList (): Boolean {
@@ -54,6 +61,7 @@ export default class ProductValidator extends BaseValidator {
 
   checkGet (): any {
     const gRule = [
+      'name|string',
       'cate|number|allowNull',
       'type|number|allowNull',
       'pid|number|allowNull',
@@ -61,6 +69,9 @@ export default class ProductValidator extends BaseValidator {
       'price|number|allowNull',
       'listed|boolean|allowNull',
       'available|boolean|allowNull',
+      'pic|boolean',
+      'page|number',
+      'size|number',
     ]
     return this.checkQuery(this.params, gRule)
   }

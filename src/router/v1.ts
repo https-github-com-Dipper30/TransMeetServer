@@ -34,11 +34,11 @@ router.post('/setStoreManager', StoreController.setManager)
 
 // product
 router.post('/addProduct', ProductController.addProduct)
-router.get('/product', ProductController.getProduct)
+router.get('/products', ProductController.getProduct)
 router.post('/list', ProductController.listProduct)
 router.post('/unlist', ProductController.unlistProduct)
 router.post('/deleteProduct', ProductController.deleteProduct)
-
+router.get('/productImage', ProductController.getProductImage)
 
 // account
 // router.post('/checkAccount', AccountController.checkAccount)
