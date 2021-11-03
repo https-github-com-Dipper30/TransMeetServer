@@ -158,7 +158,6 @@ class Product extends BaseService {
       if (!ps) throw new ProductException(errCode.PRODUCT_ERROR, 'sid error')
       if (ps.length == 0) throw new ProductException(errCode.PRODUCT_NOT_YET_LISTED, 'This store has no listed product, or the product id you provide is not available in this store.')
       const pids = ps.map((e: any) => e.dataValues?.pid)
-      console.log(pids)
       criteria.id = { [Op.in]: pids }
     }
     delete criteria.sid
@@ -190,7 +189,7 @@ class Product extends BaseService {
       // find unavailable products
       else criteria.amount = { [Op.eq]: 0 }
     }
-    console.log('c', criteria)
+
     try {
       // TODO order by listed? available?
       const products = await ProductModel.findAll({

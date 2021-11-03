@@ -17,6 +17,9 @@ module.exports = {
       price: {
         type: Sequelize.BIGINT
       },
+      unit: {
+        type: Sequelize.STRING
+      },
       cate: {
         type: Sequelize.INTEGER
       },
