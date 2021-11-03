@@ -11,9 +11,6 @@ export default class ProductValidator extends BaseValidator {
     'cate|number|required',
     'type|number|required',
     'description|string',
-    'listTS|unixTimestamp|required|allowNull',
-    'createTS|unixTimestamp|required',
-    'imgSrc|string|allowNull',
   ]
 
   constructor (params: any) {

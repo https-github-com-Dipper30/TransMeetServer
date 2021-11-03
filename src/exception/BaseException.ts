@@ -47,6 +47,10 @@ class BaseException extends Error implements Exception {
     [errCode.PRODUCT_EXISTS]: 'Ah...Product already exists!',
     [errCode.PRODUCT_ALREADY_LISTED]: 'Product already listed.',
     [errCode.PRODUCT_NOT_YET_LISTED]: 'Sorry, the product is not available now...',
+    [errCode.FILE_ERROR]: 'File Error',
+    [errCode.NO_FILE_UPLOADED]: 'No file is uploaded',
+    [errCode.FILE_TYPE_ERROR]: 'File Type Error.',
+    [errCode.DIR_BUILD_ERROR]: 'Directory Failure',
   }
 
   constructor (code: number = 500, message?: string|null|undefined) {

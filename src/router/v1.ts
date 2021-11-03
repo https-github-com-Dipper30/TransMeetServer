@@ -20,6 +20,7 @@ router.get('/businessTypes', ConfigController.getBusinessTypes)
 router.get('/regions', ConfigController.getRegions)
 router.get('/categories', ConfigController.getCategories)
 router.get('/types', ConfigController.getTypes)
+router.post('/productImage', ConfigController.upload)
 
 // staff
 router.post('/staff', StaffController.addStaff)

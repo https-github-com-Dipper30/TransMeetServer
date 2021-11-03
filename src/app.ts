@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const router = require('./router/index.ts')
 const fs = require('fs')
-
+const fileUpload = require('express-fileupload') // parse uploaded file
 import { Exception } from './types/common'
 // import config from './config'
 // import { enumIncludes } from './utils/tools'
@@ -15,7 +15,7 @@ import { Exception } from './types/common'
 
 app.use(express.json({ limit: '20mb' }))
 app.use(express.urlencoded({ extended: true }))
-
+app.use(fileUpload({ limits: { fileSize: 1024 * 1024 * 5 } })) // <= 5MB
 app.use(express.static('dist'))
 
 app.get('*', async (req: any, res: any, next: any) => {

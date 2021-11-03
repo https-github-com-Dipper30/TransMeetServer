@@ -21,18 +21,21 @@ class Product extends BaseService {
 
   async addProduct (product: ProductType) {
     try {
+      const currentUnixTS = getUnixTS()
       const [res, created] = await ProductModel.findOrCreate({
         where: {
           name: product.name,
+          cate: product.cate,
+          type: product.type,
         },
         defaults: { 
           ...product,
-          listTS: product.listTS || null,
-          imgSrc: product.imgSrc || null,
+          listTS: null,
+          createTS: currentUnixTS,
         },
       })
       if (!created) throw new ProductException(errCode.PRODUCT_EXISTS)
-      return true
+      return res
     } catch (error) {
       return error
     }

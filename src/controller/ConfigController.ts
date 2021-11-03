@@ -1,13 +1,13 @@
 import { errCode } from '../config'
-import { DatabaseException, ParameterException } from '../exception'
-import { ConfigException } from '../exception'
+import { ParameterException, ConfigException, FileException } from '../exception'
 import BaseController from './BaseController'
-import { GetStaff, Staff } from '../types/User'
-import { ConfigService, StaffService } from '../service'
-import StaffValidator from '../validator/StaffValidator'
+import { ConfigService, FileService, StaffService } from '../service'
+import { FileValidator } from '../validator'
 import { isError } from '../utils/tools'
 const B = require('../validator/BaseValidator')
 const BaseValidator = new B()
+const multiparty = require('multiparty')
+const fs = require('fs')
 
 class Config extends BaseController {
 
@@ -93,6 +93,42 @@ class Config extends BaseController {
         code: 200,
         data: types,
       })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async upload (req: any, res: any, next: any): Promise<any> {
+    try {
+      const { files } = req
+      if (!files) throw new FileException(errCode.NO_FILE_UPLOADED)
+      
+      if (Array.isArray(files.file)) {
+        // multiple files
+        const imgList: any[] = files.file
+        const valid = new FileValidator(imgList)
+        if (!valid.checkType()) throw new FileException(errCode.FILE_TYPE_ERROR, 'Only .jpeg .jpg .png are accepted.')
+        
+      } else {
+        // single file
+        const img = files.file
+        const valid = new FileValidator(img)
+        if (!valid.checkType()) throw new FileException(errCode.FILE_TYPE_ERROR, 'Only .jpeg .jpg .png are accepted.')
+      }
+
+      let { id } = req.body
+      if (!id) throw new FileException(errCode.FILE_ERROR, 'Require Product ID.')
+      
+      id = parseInt(id)
+      const uploaded = await FileService.writeProductImage(files.file, id)
+      if(isError(uploaded)) throw uploaded
+
+      if (uploaded) {
+        res.json({
+          code: 201,
+          msg: 'uploaded',
+        })
+      }
     } catch (error) {
       next(error)
     }

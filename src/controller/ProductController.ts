@@ -17,8 +17,8 @@ class Product extends BaseController {
 
   async addProduct (req: any, res: any, next: any): Promise<any> {
     try {
-      // const Token = new TokenService(req.headers.token)
-      // if (!Token.verifyToken()) throw new TokenException()
+      const Token = new TokenService(req.headers.token)
+      if (!Token.verifyToken()) throw new TokenException()
 
       const data: ProductType = req.body
       const valid: ProductValidator = new ProductValidator(data)
@@ -29,7 +29,9 @@ class Product extends BaseController {
 
       res.json({
         code: 201,
-        msg: 'created!',
+        data: {
+          id: created.id,
+        },
       })
     } catch (error) {
       next(error)
@@ -96,8 +98,6 @@ class Product extends BaseController {
       const valid = new ProductValidator(query)
       const data = valid.checkGet()
       if (!data) throw new ParameterException()
-
-      console.log('data', data)
 
       const product = await ProductService.getProduct(data)
       if (isError(product)) throw product

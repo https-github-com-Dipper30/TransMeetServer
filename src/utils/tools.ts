@@ -129,3 +129,7 @@ export const getPagerFromQuery = (query: any) => {
 export const getUnixTS = (): number => {
   return Math.floor(new Date().getTime() / 1000)
 }
+
+export const getTS = (): number => {
+  return new Date().getTime()
+}

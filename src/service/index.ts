@@ -3,6 +3,7 @@ import ConfigService from './ConfigService'
 import StoreService from './StoreService'
 import TokenService from './TokenService'
 import StaffService from './StaffService'
+import FileService from './FileService'
 
 export {
   AuthService,
@@ -10,4 +11,5 @@ export {
   StoreService,
   StaffService,
   TokenService,
+  FileService,
 }

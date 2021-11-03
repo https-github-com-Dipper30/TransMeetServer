@@ -55,6 +55,11 @@ export enum errCode {
   STORE_ALREADY_EXISTS = 70001,
   DUPLICATE_STORE_NAME = 70002,
 
+  // file error code
+  FILE_ERROR = 80000,
+  NO_FILE_UPLOADED = 80001,
+  FILE_TYPE_ERROR = 80002,
+  DIR_BUILD_ERROR = 80003,
   // product error code
 
 }
