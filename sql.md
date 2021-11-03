@@ -112,10 +112,12 @@ create Table product {
   name: varchar(255),
   amount: int min(0),
   price: bigint,
+  unit: varchar(255), // the unit price of the product is [price] $ / [unit], for example 99.99$ / 1 packet
+  imgSrc: text, // image source
   cate: int, // first order
   type: int, // second order
   description: varchar(255),
-  createTS: int, // timestamp of creation time
+  createTS: int, // unix timestamp of creation
   listTS: int, // timestamp of when the product is listed
 }
 
