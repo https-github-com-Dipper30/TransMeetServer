@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # static files
-.file
+file/*
