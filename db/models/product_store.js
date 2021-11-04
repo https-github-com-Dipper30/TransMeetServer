@@ -14,8 +14,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Product_Store.init({
-    pid: DataTypes.INTEGER,
-    sid: DataTypes.INTEGER
+    pid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: 'Product_Store',
+    },
+    sid: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      unique: 'Product_Store',
+    },
   }, {
     sequelize,
     timestamps: false,

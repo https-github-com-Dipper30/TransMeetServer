@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -11,6 +12,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Product.belongsToMany(models.Store, {
+        through: {
+          model: models.Product_Store,
+          unique: false,
+        },
+        foreignKey: 'pid',
+        constraints: false,
+      })
     }
   };
   Product.init({

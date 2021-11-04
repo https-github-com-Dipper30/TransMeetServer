@@ -10,6 +10,7 @@ import FileService from './FileService'
 const models = require('../../db/models')
 const {
   Product: ProductModel,
+  Store: StoreModel,
   Product_Store: ProductStore,
   Category: CategoryModel,
   Type: TypeModel,
@@ -48,37 +49,20 @@ class Product extends BaseService {
     const t = await sequelize.transaction()
     const { pid, sid } = p
     try {
-      const product = await ProductModel.findByPk(pid)
+      const product = await ProductModel.findByPk(pid, { transaction: t })
       if (!product) throw new ProductException(errCode.PRODUCT_NOT_FOUND)
       if (product.listTS) throw new ProductException(errCode.PRODUCT_ALREADY_LISTED)
 
-      // iterate each store id, bind it to a pid as a record
-      for (let storeID of sid) {
-        await ProductStore.findOrCreate({
-          where: {
-            pid,
-            sid: storeID,
-          },
-          defaults: {
-            pid,
-            sid: storeID,
-          },
-          transaction: t,
-        })
-      }
-
-      // now update the product's listTS
-      const ts = getUnixTS()
-      await ProductModel.update({
-        listTS: ts,
-      }, {
+      product.listTS = getUnixTS()
+      const storeIDs = await StoreModel.findAll({
         where: {
-          id: pid,
+          id: { [Op.in]: sid },
         },
-      }, {
         transaction: t,
       })
-
+      await product.setStores(storeIDs)
+      await product.save()
+      
       await t.commit()
       return true
     } catch (error) {
@@ -91,27 +75,19 @@ class Product extends BaseService {
     const t = await sequelize.transaction()
     const { pid } = p
     try {
-        const product = await ProductModel.findByPk(pid)
-        if (!product) throw new ProductException(errCode.PRODUCT_NOT_FOUND)
-        if (!product.listTS) throw new ProductException(errCode.PRODUCT_NOT_YET_LISTED, 'The product is not listed.')
-        
-        // delete every record in Product_Stores table where pid = pid
-        await ProductStore.destroy({
-          where: {
-            pid,
-          },
-          transaction: t,
-        })
-      // now update the product's listTS to null
-      await ProductModel.update({
-        listTS: null,
-      }, {
+      const product = await ProductModel.findByPk(pid, { transaction: t })
+      if (!product) throw new ProductException(errCode.PRODUCT_NOT_FOUND)
+      if (!product.listTS) throw new ProductException(errCode.PRODUCT_NOT_YET_LISTED, 'The product is not listed.')
+      
+      // delete every record in Product_Stores table where pid = pid
+      await ProductStore.destroy({
         where: {
-          id: pid,
+          pid,
         },
-      }, {
         transaction: t,
       })
+      product.listTS = null
+      await product.save()
       await t.commit()
       return true
     } catch (error) {
@@ -210,6 +186,7 @@ class Product extends BaseService {
       const products = await ProductModel.findAndCountAll({
         where: criteria,
         order: [
+          ['id', 'DESC'],
           ['cate'],
           ['type'],
           ['price', 'DESC'],
@@ -225,6 +202,10 @@ class Product extends BaseService {
           {
             model: TypeModel,
             attributes: ['name'],
+          },
+          {
+            model: StoreModel,
+            attributes: ['name', 'id'],
           },
         ],
       })

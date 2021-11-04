@@ -13,6 +13,7 @@ const {
   Staff: StaffModel,
   Region: RegionModel,
   State: StateModel,
+  Product: ProductModel,
 } = models
 const { sequelize } = require('../../db/models')
 
@@ -152,6 +153,9 @@ class Store extends BaseService {
           {
             model: RegionModel,
             attributes: ['name'],
+          },
+          {
+            model: ProductModel,
           },
         ],
       })
