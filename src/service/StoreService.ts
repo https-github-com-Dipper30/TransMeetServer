@@ -128,10 +128,6 @@ class Store extends BaseService {
     const criteria: Object = createCriteria(query, ['id', 'manager_id', 'region_id', 'state_id'])
     const [limit, offset] = getPagerFromQuery(query)
     try {
-      StoreModel.belongsTo(StateModel, { foreignKey: 'state_id', targetKey: 'id' } )
-      StoreModel.belongsTo(StaffModel, { foreignKey: 'manager_id', targetKey: 'id' } )
-      StoreModel.belongsTo(RegionModel, { foreignKey: 'region_id', targetKey: 'id' } )
-
       const stores = await StoreModel.findAndCountAll({
         where: criteria,
         order: [

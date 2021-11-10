@@ -1,6 +1,4 @@
 import BaseController from './BaseController'
-import { User, HomeCustomer, Admin, BusinessCustomer } from '../types/User'
-import { Validator, Account } from '../types/common'
 import { AuthException, ParameterException, UserException, DatabaseException, TokenException, FileException } from '../exception'
 import { errCode } from '../config'
 import { ProductValidator } from '../validator'

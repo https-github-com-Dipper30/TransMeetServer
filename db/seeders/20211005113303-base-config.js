@@ -115,6 +115,7 @@ module.exports = {
     ], {})
     await queryInterface.bulkInsert('Staffs', [
       {
+        id: 1,
         name: 'Rose',
         job_title: 2,
         store_assigned: 1,
@@ -122,6 +123,7 @@ module.exports = {
         salary: 500000
       },
       {
+        id: 2,
         name: 'Yvonne',
         job_title: 2,
         store_assigned: 2,
@@ -129,6 +131,7 @@ module.exports = {
         salary: 400000
       },
       {
+        id: 3,
         name: 'Shirley',
         job_title: 2,
         store_assigned: 3,
@@ -136,6 +139,7 @@ module.exports = {
         salary: 600000
       },
       {
+        id: 4,
         name: 'Jack',
         job_title: 2,
         store_assigned: 4,
@@ -143,6 +147,7 @@ module.exports = {
         salary: 587963
       },
       {
+        id: 5,
         name: 'Ashley',
         job_title: 2,
         store_assigned: 5,
@@ -150,6 +155,7 @@ module.exports = {
         salary: 345678
       },
       {
+        id: 6,
         name: 'Rhett',
         job_title: 2,
         store_assigned: 6,
@@ -157,6 +163,7 @@ module.exports = {
         salary: 456789
       },
       {
+        id: 7,
         name: 'Melanie',
         job_title: 2,
         store_assigned: 7,
@@ -164,6 +171,7 @@ module.exports = {
         salary: 567891
       },
       {
+        id: 8,
         name: 'Scarlet',
         job_title: 2,
         store_assigned: 8,
@@ -171,6 +179,7 @@ module.exports = {
         salary: 876543
       },
       {
+        id: 9,
         name: 'Jerry',
         job_title: 2,
         store_assigned: 9,
@@ -178,6 +187,7 @@ module.exports = {
         salary: 987654
       },
       {
+        id: 10,
         name: 'Amanda',
         job_title: 2,
         store_assigned: 10,
@@ -185,6 +195,7 @@ module.exports = {
         salary: 878787
       },
       {
+        id: 11,
         name: 'Camila',
         job_title: 2,
         store_assigned: 11,
@@ -192,6 +203,7 @@ module.exports = {
         salary: 600000
       },
       {
+        id: 12,
         name: 'Charlotte',
         job_title: 2,
         store_assigned: 12,
@@ -199,6 +211,7 @@ module.exports = {
         salary: 565656
       },
       {
+        id: 13,
         name: 'Frank',
         job_title: 1,
         store_assigned: 1,
@@ -206,6 +219,7 @@ module.exports = {
         salary: 123456
       },
       {
+        id: 14,
         name: 'Alex',
         job_title: 1,
         store_assigned: 3,
@@ -213,6 +227,7 @@ module.exports = {
         salary: 234567
       },
       {
+        id: 15,
         name: 'Jason',
         job_title: 1,
         store_assigned: 5,
@@ -220,6 +235,7 @@ module.exports = {
         salary: 333333
       },
       {
+        id: 16,
         name: 'Mike',
         job_title: 1,
         store_assigned: 7,
@@ -227,6 +243,7 @@ module.exports = {
         salary: 444444
       },
       {
+        id: 17,
         name: 'Mary',
         job_title: 1,
         store_assigned: 9,
@@ -234,6 +251,7 @@ module.exports = {
         salary: 323232
       },
       {
+        id: 18,
         name: 'Patrick',
         job_title: 1,
         store_assigned: 11,
@@ -241,6 +259,7 @@ module.exports = {
         salary: 232323
       },
       {
+        id: 19,
         name: 'Jacob',
         job_title: 3,
         store_assigned: null,
@@ -248,6 +267,7 @@ module.exports = {
         salary: 999999
       },
       {
+        id: 20,
         name: 'Edward',
         job_title: 3,
         store_assigned: null,
@@ -255,6 +275,7 @@ module.exports = {
         salary: 888888
       },
       {
+        id: 21,
         name: 'Bella',
         job_title: 3,
         store_assigned: null,
@@ -262,6 +283,7 @@ module.exports = {
         salary: 777777
       },
       {
+        id: 22,
         name: 'Barney',
         job_title: 3,
         store_assigned: null,
@@ -269,6 +291,7 @@ module.exports = {
         salary: 989898
       },
       {
+        id: 23,
         name: 'Robin',
         job_title: 3,
         store_assigned: null,
