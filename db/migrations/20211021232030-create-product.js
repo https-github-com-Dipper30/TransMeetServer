@@ -35,9 +35,6 @@ module.exports = {
       listTS: {
         type: Sequelize.INTEGER
       },
-      imgSrc: {
-        type: Sequelize.STRING
-      }
     });
   },
   down: async (queryInterface, Sequelize) => {

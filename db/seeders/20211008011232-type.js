@@ -59,7 +59,7 @@ module.exports = {
         cate_code: 1,
       },
       {
-        name: 'Cookies',
+        name: 'Donuts',
         code: 5,
         cate_code: 1,
       },

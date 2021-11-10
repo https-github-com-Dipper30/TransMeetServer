@@ -178,7 +178,6 @@ class Product extends BaseService {
       delete criteria['pic']
     }
     const [limit, offset] = getPagerFromQuery(query)
-    
     try {
       // TODO order by listed? available?
       ProductModel.belongsTo(CategoryModel, { foreignKey: 'cate', targetKey: 'code' })

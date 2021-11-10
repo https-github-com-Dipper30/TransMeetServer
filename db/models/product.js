@@ -32,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.STRING,
     createTS: DataTypes.INTEGER,
     listTS: DataTypes.INTEGER,
-    imgSrc: DataTypes.TEXT,
   }, {
     sequelize,
     timestamps: false,
