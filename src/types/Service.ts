@@ -24,15 +24,16 @@ export interface SetStoreManager {
 }
 
 export interface ProductType {
+  id?: number,
   name: string,
   amount: number,
   price: number,
   cate: number,
+  unit: string,
   type: number,
   description?: string,
-  createTS: number,
+  createTS?: number,
   listTS?: number|null,
-  imgSrc?: string|null,
 }
 
 export interface ListProduct {

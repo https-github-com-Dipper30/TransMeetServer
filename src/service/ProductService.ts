@@ -45,6 +45,22 @@ class Product extends BaseService {
     }
   }
 
+  async updateProduct (product: ProductType|any) {
+    try {
+      const p = await ProductModel.findByPk(product.id)
+      if (!p) throw new ProductException(errCode.PRODUCT_NOT_FOUND)
+
+      delete product.id
+      for (let prop in product) {
+        p[prop] = product[prop]
+      }
+      await p.save()
+      return true
+    } catch (error) {
+      return error
+    }
+  }
+
   async listProduct (p: ListProduct) {
     const t = await sequelize.transaction()
     const { pid, sid } = p

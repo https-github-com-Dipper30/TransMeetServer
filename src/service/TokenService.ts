@@ -17,7 +17,7 @@ class Token {
     return token
   }
 
-  verifyToken () {
+  verifyToken (authPoint?: number|undefined) {
     const token = this.data
     try {
       const res = jwt.verify(token, TOKEN_PRIVATE_KEY) || {}
@@ -25,6 +25,7 @@ class Token {
       const current = Math.floor(Date.now() / 1000)
       // if current timestamp is larger than the expire time, return false
       if (current > exp) return false
+      if (authPoint && !auth.includes(authPoint)) return false
       return res
     } catch (error) {
       return false

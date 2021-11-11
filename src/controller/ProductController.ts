@@ -18,6 +18,13 @@ class Product extends BaseController {
       const Token = new TokenService(req.headers.token)
       if (!Token.verifyToken()) throw new TokenException()
 
+      /**
+       * for further access control, do the following codes
+       * const res = Token.verifyToken()
+       * const { auth } = res
+       * if (!auth.includes(someAccess)) return false
+       */
+
       const data: ProductType = req.body
       const valid: ProductValidator = new ProductValidator(data)
       if (!valid.goCheck()) throw new ParameterException()
@@ -36,8 +43,32 @@ class Product extends BaseController {
     }
   }
 
+  async updateProduct (req: any, res: any, next: any): Promise<any> {
+    try {
+      const Token = new TokenService(req.headers.token)
+      if (!Token.verifyToken()) throw new TokenException()
+
+      const data: ProductType = req.body
+      const valid: ProductValidator = new ProductValidator(data)
+      if (!valid.checkUpdate()) throw new ParameterException()
+
+      const updated: any = await ProductService.updateProduct(data)
+      if (isError(updated)) throw updated
+
+      res.json({
+        code: 200,
+        msg: 'Updated!',
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async listProduct (req: any, res: any, next: any): Promise<any> {
     try {
+      const Token = new TokenService(req.headers.token)
+      if (!Token.verifyToken()) throw new TokenException()
+
       const data: ListProduct = req.body
       const valid: ProductValidator = new ProductValidator(data)
       if (!valid.checkList()) throw new ParameterException()
@@ -74,6 +105,7 @@ class Product extends BaseController {
 
   async deleteProduct (req: any, res: any, next: any): Promise<any> {
     try {
+      
       const data: ListProduct = req.body
       const valid: ProductValidator = new ProductValidator(data)
       if (!valid.checkDelete()) throw new ParameterException()

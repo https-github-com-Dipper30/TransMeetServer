@@ -26,6 +26,23 @@ export default class ProductValidator extends BaseValidator {
     && this.isBetween(this.params.type, 1, 36)
   }
 
+  checkUpdate (): Boolean {
+    const uRule = [
+      'id|number|required',
+      'name|string|required',
+      'amount|number|required',
+      'price|number|required',
+      'cate|number|required',
+      'type|number|required',
+      'description|string',
+    ]
+    return this.checkParams(this.params, uRule)
+    && this.isPositiveInteger(this.params.id)
+    && this.isPositiveInteger(this.params.price)
+    && this.isBetween(this.params.cate, 1, 6)
+    && this.isBetween(this.params.type, 1, 36)
+  }
+
   checkGetImage (): Boolean {
     const iRule = [
       'id|number',

@@ -34,6 +34,7 @@ router.post('/setStoreManager', StoreController.setManager)
 
 // product
 router.post('/addProduct', ProductController.addProduct)
+router.post('/updateProduct', ProductController.updateProduct)
 router.get('/products', ProductController.getProduct)
 router.post('/list', ProductController.listProduct)
 router.post('/unlist', ProductController.unlistProduct)
