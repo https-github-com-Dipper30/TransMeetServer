@@ -122,11 +122,11 @@ create Table product {
 
 create Table cart_item {
   id: int not null primary,
-  user_id: nt foreign key user(id),
-  product_id: int foreign key product(id),
-  store_id: int foreign key store(id),
-  product_amount: int min(0),
-  status: int, // selected?
+  uid: int foreign key user(id),
+  pid: int foreign key product(id),
+  sid: int foreign key store(id),
+  amount: int min(0), // product amount
+  <!-- status: int, // selected? -->
 }
 
 create Table product_store {

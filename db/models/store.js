@@ -14,14 +14,10 @@ module.exports = (sequelize, DataTypes) => {
       Store.belongsTo(models.State, { foreignKey: 'state_id', targetKey: 'id' } )
       Store.belongsTo(models.Staff, { foreignKey: 'manager_id', targetKey: 'id' } )
       Store.belongsTo(models.Region, { foreignKey: 'region_id', targetKey: 'id' } )
-      Store.belongsToMany(models.Product, {
-        through: {
-          model: models.Product_Store,
-          unique: false,
-        },
-        foreignKey: 'sid',
-        constraints: false,
-      })
+      // Store.hasMany(models.Product_Store, {
+      //   foreignKey: 'sid',
+      //   onDelete: 'CASCADE',
+      // })
     }
   };
   Store.init({

@@ -52,6 +52,7 @@ class BaseException extends Error implements Exception {
     [errCode.FILE_TYPE_ERROR]: 'File Type Error.',
     [errCode.DIR_BUILD_ERROR]: 'Directory Failure',
     [errCode.DIR_NOT_EXISTS]: 'Directory Not Exists',
+    [errCode.CART_ERROR]: 'Cart Error',
   }
 
   constructor (code: number = 500, message?: string|null|undefined) {

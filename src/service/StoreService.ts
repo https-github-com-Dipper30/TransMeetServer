@@ -14,6 +14,7 @@ const {
   Region: RegionModel,
   State: StateModel,
   Product: ProductModel,
+  Product_Store: ProductStore,
 } = models
 const { sequelize } = require('../../db/models')
 
@@ -243,6 +244,13 @@ class Store extends BaseService {
         }
         await staff.save()
       }
+
+      await ProductStore.destroy({
+        where: {
+          sid: id,
+        },
+        transaction: t,
+      })
 
       await store.destroy()
       await t.commit()

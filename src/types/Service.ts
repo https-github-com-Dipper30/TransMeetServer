@@ -54,3 +54,14 @@ export interface GetProduct {
   page?: number,
   size?: number,
 }
+
+export interface AddToCart {
+  uid: number,
+  pid: number,
+  sid: number,
+  amount: number,
+}
+
+export interface GetCart {
+  uid: number,
+}

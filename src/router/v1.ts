@@ -1,4 +1,5 @@
 import { Router } from 'express'
+import CartController from '../controller/CartController'
 import { 
   AuthController,
   ConfigController,
@@ -41,6 +42,9 @@ router.post('/unlist', ProductController.unlistProduct)
 router.post('/deleteProduct', ProductController.deleteProduct)
 router.get('/productImage', ProductController.getProductImage)
 
+// cart
+router.post('/addToCart', CartController.addToCart)
+router.get('/cart', CartController.getCatItems)
 // account
 // router.post('/checkAccount', AccountController.checkAccount)
 // router.post('/register', AccountController.register)

@@ -14,6 +14,7 @@ const {
   Product_Store: ProductStore,
   Category: CategoryModel,
   Type: TypeModel,
+  CartItem: CartItemModel,
 } = models
 const { sequelize } = require('../../db/models')
 
@@ -102,6 +103,14 @@ class Product extends BaseService {
         },
         transaction: t,
       })
+      // delete every record in CartItem table where pid = pid
+      await CartItemModel.destroy({
+        where: {
+          pid,
+        },
+        transaction: t,
+      })
+
       product.listTS = null
       await product.save()
       await t.commit()
@@ -196,8 +205,6 @@ class Product extends BaseService {
     const [limit, offset] = getPagerFromQuery(query)
     try {
       // TODO order by listed? available?
-      ProductModel.belongsTo(CategoryModel, { foreignKey: 'cate', targetKey: 'code' })
-      ProductModel.belongsTo(TypeModel, { foreignKey: 'type', targetKey: 'code' })
       const products = await ProductModel.findAndCountAll({
         where: criteria,
         order: [
