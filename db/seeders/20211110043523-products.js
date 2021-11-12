@@ -301,6 +301,269 @@ module.exports = {
             createTS: 1636519287,
         },
         {
+            name: 'Chicken1', // string
+            cate: 6, // int
+            type: 32, // int
+            price: 500, // bigint, eg: 10000 (meaning 100.00$)
+            amount: 1000, // int number of inventory
+            unit: '1.5 pound', // string, eg: '100g' '1 packet'
+            description: 'Tasty products. Hot selling!',
+            listTS: null,
+            createTS: 1636519287,
+        },
+        {
+          name: 'Chicken2', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken3', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken4', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken5', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken6', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken7', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken8', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken9', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken10', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken11', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken12', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken13', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken14', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken15', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken16', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken17', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken18', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },{
+          name: 'Chicken19', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken20', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken21', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken22', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken23', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
+          name: 'Chicken24', // string
+          cate: 6, // int
+          type: 32, // int
+          price: 500, // bigint, eg: 10000 (meaning 100.00$)
+          amount: 1000, // int number of inventory
+          unit: '1.5 pound', // string, eg: '100g' '1 packet'
+          description: 'Tasty products. Hot selling!',
+          listTS: null,
+          createTS: 1636519287,
+        },
+        {
             name: 'Beef', // string
             cate: 6, // int
             type: 33, // int

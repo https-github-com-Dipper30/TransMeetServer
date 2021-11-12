@@ -138,6 +138,7 @@ class Store extends BaseService {
         ],
         limit,
         offset,
+        distinct: true, // avoid wrong count due to include
         include: [
           {
             model: StateModel,

@@ -89,6 +89,7 @@ export default class ProductValidator extends BaseValidator {
       'pic|boolean',
       'page|number',
       'size|number',
+      'showStores|boolean',
     ]
     return this.checkQuery(this.params, gRule)
   }

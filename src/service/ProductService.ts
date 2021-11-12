@@ -202,6 +202,24 @@ class Product extends BaseService {
     if (criteria.hasOwnProperty('pic')) {
       delete criteria['pic']
     }
+    const includes = [
+      {
+        model: CategoryModel,
+        attributes: ['name'],
+      },
+      {
+        model: TypeModel,
+        attributes: ['name'],
+      },
+      {
+        model: StoreModel,
+        attributes: ['name', 'id'],
+      },
+    ]
+    if (criteria?.showStores == false) {
+      includes.pop()
+    }
+    delete criteria.showStores
     const [limit, offset] = getPagerFromQuery(query)
     try {
       // TODO order by listed? available?
@@ -216,20 +234,8 @@ class Product extends BaseService {
         ],
         limit,
         offset,
-        include: [
-          {
-            model: CategoryModel,
-            attributes: ['name'],
-          },
-          {
-            model: TypeModel,
-            attributes: ['name'],
-          },
-          {
-            model: StoreModel,
-            attributes: ['name', 'id'],
-          },
-        ],
+        distinct: true, // avoid wrong count due to include
+        include: includes,
       })
       if (!products) return new ProductException(errCode.PRODUCT_ERROR)
 

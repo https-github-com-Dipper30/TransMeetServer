@@ -53,6 +53,7 @@ export interface GetProduct {
   pic?: boolean, // if images are required
   page?: number,
   size?: number,
+  showStores?: boolean,
 }
 
 export interface AddToCart {
