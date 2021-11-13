@@ -27,4 +27,13 @@ export default class CartValidator extends BaseValidator {
     ]
     return this.checkQuery(this.params, gRule)
   }
+
+  checkIsInCart (): Boolean {
+    const iRule = [
+      'uid|number|required',
+      'pid|number|required',
+      'sid|number|required',
+    ]
+    return this.checkParams(this.params, iRule)
+  }
 }

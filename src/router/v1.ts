@@ -45,6 +45,7 @@ router.get('/productImage', ProductController.getProductImage)
 // cart
 router.post('/addToCart', CartController.addToCart)
 router.get('/cart', CartController.getCatItems)
+router.post('/isInCart', CartController.isInCart)
 // account
 // router.post('/checkAccount', AccountController.checkAccount)
 // router.post('/register', AccountController.register)

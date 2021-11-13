@@ -66,3 +66,9 @@ export interface AddToCart {
 export interface GetCart {
   uid: number,
 }
+
+export interface IsInCart {
+  uid: number,
+  pid: number,
+  sid: number,
+}

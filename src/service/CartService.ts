@@ -3,7 +3,7 @@ import { Account } from '../types/common'
 import { User, HomeCustomer, Admin, BusinessCustomer } from '../types/User'
 import BaseService from './BaseService'
 import { encryptMD5, omitFields } from '../utils/tools'
-import { AddToCart, GetCart } from '../types/Service'
+import { AddToCart, GetCart, IsInCart } from '../types/Service'
 import { CartException, DatabaseException } from '../exception'
 import { errCode } from '../config'
 
@@ -55,6 +55,15 @@ class Cart extends BaseService {
       })
       if (!ps) throw new CartException(errCode.CART_ERROR, 'The store does not have the product.')
 
+      const cartItem = await CartItemModel.findOne({
+        where: {
+          uid,
+          pid,
+          sid,
+        },
+      })
+      if (cartItem) throw new CartException(errCode.CART_ERROR, 'Cart item already exists.')
+
       const added = CartItemModel.create(item)
       if (!added) throw new CartException()
 
@@ -74,11 +83,12 @@ class Cart extends BaseService {
       const user = await UserModel.findByPk(uid)
       if (!user) throw new CartException(errCode.CART_ERROR, 'User not exists.')
       
-      const cart = await UserModel.findOne({
-        where: { id: uid },
-        attributes: ['id'],
+      const cart = await CartItemModel.findAndCountAll({
+        where: { uid },
+        distinct: true,
+        attributes: ['sid', 'amount'],
         include: [
-          { 
+          {
             model: ProductModel,
             include: [
               {
@@ -92,6 +102,12 @@ class Cart extends BaseService {
             ],
           },
         ],
+        // include: [
+          // { 
+            // model: ProductModel,
+            
+          // },
+        // ],
       })
       if (!cart) throw new CartException(errCode.CART_ERROR)
       return cart
@@ -99,6 +115,23 @@ class Cart extends BaseService {
       return error
     }
     
+  }
+
+  async isInCart (p: IsInCart): Promise<any> {
+    try {
+      const { uid, pid, sid } = p
+      const cartItem = await CartItemModel.findOne({
+        where: {
+          uid,
+          pid,
+          sid,
+        },
+      })
+      if (cartItem) return true
+      else return false
+    } catch (error) {
+      return error
+    }
   }
 
 }

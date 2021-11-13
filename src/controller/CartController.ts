@@ -3,7 +3,7 @@ import { AuthException, ParameterException, UserException, DatabaseException, To
 import { errCode } from '../config'
 import { CartValidator, ProductValidator } from '../validator'
 import { AuthService, CartService, FileService, TokenService } from '../service'
-import { AddToCart, GetCart, GetProduct, ListProduct, ProductType } from '../types/Service'
+import { AddToCart, GetCart, GetProduct, IsInCart, ListProduct, ProductType } from '../types/Service'
 import ProductService from '../service/ProductService'
 import { isError } from '../utils/tools'
 import { nextTick } from 'process'
@@ -46,7 +46,7 @@ class Cart extends BaseController {
       // const Token = new TokenService(req.headers.token)
       // if (!Token.verifyToken()) throw new TokenException()
 
-      let data: any = req.body
+      let data: any = req.query
       const valid: CartValidator = new CartValidator(data)
       data = valid.checkGet()
       if (!data) throw new ParameterException()
@@ -57,6 +57,28 @@ class Cart extends BaseController {
       res.json({
         code: 200,
         data: cart,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  // check if the product is in user's cart
+  async isInCart (req: any, res: any, next: any): Promise<any> {
+    try {
+      // const Token = new TokenService(req.headers.token)
+      // if (!Token.verifyToken()) throw new TokenException()
+
+      let data: IsInCart = req.body
+      const valid: CartValidator = new CartValidator(data)
+      if (!valid.checkIsInCart()) throw new ParameterException()
+
+      const isInCart: any = await CartService.isInCart(data)
+      if (isError(isInCart)) throw isInCart
+
+      res.json({
+        code: 200,
+        data: isInCart,
       })
     } catch (error) {
       next(error)
