@@ -209,7 +209,7 @@ class Product extends BaseService {
       },
       {
         model: TypeModel,
-        attributes: ['name'],
+        attributes: ['name', 'code'],
       },
       {
         model: StoreModel,
