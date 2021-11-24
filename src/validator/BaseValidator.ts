@@ -41,7 +41,7 @@ class BaseValidator implements Validator {
             if ( typeof params[key] != 'string' ) return false
             break
           case 'boolean': 
-            if ( !validator.isBoolean(params[key]) ) return false
+            if ( params[key] != false && params[key] != true ) return false
             break
           case 'date':
             if ( !validator.isDate(params[key]) ) return false

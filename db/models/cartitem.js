@@ -12,13 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       CartItem.belongsTo(models.Product, { foreignKey: 'pid', targetKey: 'id' })
+      CartItem.belongsTo(models.Store, { foreignKey: 'sid', targetKey: 'id' })
     }
   };
   CartItem.init({
     uid: DataTypes.INTEGER,
     pid: DataTypes.INTEGER,
     sid: DataTypes.INTEGER,
-    amount: DataTypes.INTEGER
+    amount: DataTypes.INTEGER,
+    selected: DataTypes.BOOLEAN,
   }, {
     sequelize,
     timestamps: false,

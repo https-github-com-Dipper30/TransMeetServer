@@ -67,6 +67,12 @@ export interface GetCart {
   uid: number,
 }
 
+export interface UpdateCart {
+  id: number,
+  amount?: number,
+  selected?: boolean,
+}
+
 export interface IsInCart {
   uid: number,
   pid: number,

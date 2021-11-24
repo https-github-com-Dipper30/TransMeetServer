@@ -3,8 +3,8 @@ import { Account } from '../types/common'
 import { User, HomeCustomer, Admin, BusinessCustomer } from '../types/User'
 import BaseService from './BaseService'
 import { encryptMD5, omitFields } from '../utils/tools'
-import { AddToCart, GetCart, IsInCart } from '../types/Service'
-import { CartException, DatabaseException } from '../exception'
+import { AddToCart, GetCart, IsInCart, UpdateCart } from '../types/Service'
+import { CartException, ConfigException, DatabaseException } from '../exception'
 import { errCode } from '../config'
 
 const models = require('../../db/models/index.js')
@@ -18,6 +18,7 @@ const {
   Product: ProductModel,
   CartItem: CartItemModel,
   Category: CategoryModel,
+  Store: StoreModel,
   Product_Store,
   Type: TypeModel,
 } = models
@@ -39,7 +40,6 @@ class Cart extends BaseService {
    */
   async addToCart (item: AddToCart): Promise<any> {
     try {
-
       const { uid, pid, sid } = item
       const user = await UserModel.findByPk(uid)
       if (!user) throw new CartException(errCode.CART_ERROR, 'Can\'t find user.')
@@ -64,10 +64,25 @@ class Cart extends BaseService {
       })
       if (cartItem) throw new CartException(errCode.CART_ERROR, 'Cart item already exists.')
 
-      const added = CartItemModel.create(item)
+      const added = CartItemModel.create({ ...item, selected: true })
       if (!added) throw new CartException()
 
       return added
+    } catch (error) {
+      return error
+    }
+  }
+
+  async updateCart (p: UpdateCart, userID: number) {
+    try {
+      const { id, amount, selected } = p
+      const cartItem = await CartItemModel.findByPk(id)
+      if (!cartItem) throw new CartException(errCode.CART_ERROR, 'Cart Not Found.')
+      if (cartItem.uid != userID) throw new ConfigException(errCode.ACCESS_ERROR, 'Not Authorized.')
+      
+      if (amount) cartItem.amount = amount
+      if (selected == true || selected == false) cartItem.selected = selected
+      await cartItem.save()
     } catch (error) {
       return error
     }
@@ -86,7 +101,7 @@ class Cart extends BaseService {
       const cart = await CartItemModel.findAndCountAll({
         where: { uid },
         distinct: true,
-        attributes: ['sid', 'amount'],
+        attributes: ['id', 'selected', 'sid', 'amount'],
         include: [
           {
             model: ProductModel,
@@ -100,6 +115,10 @@ class Cart extends BaseService {
                 attributes: ['name'],
               },
             ],
+          },
+          {
+            model: StoreModel,
+            attributes: ['id', 'name'],
           },
         ],
         // include: [
@@ -129,6 +148,17 @@ class Cart extends BaseService {
       })
       if (cartItem) return true
       else return false
+    } catch (error) {
+      return error
+    }
+  }
+
+  async deleteCart (p: { id: number }, userID: number): Promise<any> {
+    try {
+      const { id } = p
+      const item = await CartItemModel.findByPk(id)
+      if (item.uid != userID) throw new CartException(errCode.CART_ERROR, 'Not Authorized.')
+      return await item.destroy()
     } catch (error) {
       return error
     }
