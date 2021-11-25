@@ -176,6 +176,23 @@ class Staff extends BaseService {
     }
   }
 
+  async getRandomStaffByStoreId (sid: number): Promise<any> {
+    try {
+      const staff = await StaffModel.findAndCountAll({
+        where: {
+          store_assigned: sid,
+        },
+      })
+      if (!staff) return new StoreException(errCode.STORE_ERROR, 'No staff in store.')
+      if (staff.count == 0) return null
+      const n: number = Math.floor(Math.random() * parseInt(staff.count))
+      
+      return staff.rows[n]
+    } catch (error) {
+      return error
+    }
+  }
+
 }
 
 export default new Staff()

@@ -1,6 +1,5 @@
 const validator = require('validator')
-import { type } from 'os'
-import { RegularExpressionLiteral } from 'typescript'
+
 import { Validator } from '../types/common'
 import { queryIsNull } from '../utils/tools'
 

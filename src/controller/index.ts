@@ -5,6 +5,7 @@ import ConfigController from './ConfigController'
 import StoreController from './StoreController'
 import ProductController from './ProductController'
 import StaffController from './StaffController'
+import OrderController from './OrderController'
 
 export {
   BaseController,
@@ -14,4 +15,5 @@ export {
   StoreController,
   ProductController,
   StaffController,
+  OrderController,
 }

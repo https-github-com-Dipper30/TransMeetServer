@@ -53,6 +53,8 @@ class BaseException extends Error implements Exception {
     [errCode.DIR_BUILD_ERROR]: 'Directory Failure',
     [errCode.DIR_NOT_EXISTS]: 'Directory Not Exists',
     [errCode.CART_ERROR]: 'Cart Error',
+    [errCode.ORDER_ERROR]: 'Order Error',
+    [errCode.ORDER_NOT_FOUND]: 'Order Not Found',
   }
 
   constructor (code: number = 500, message?: string|null|undefined) {

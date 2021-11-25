@@ -6,6 +6,7 @@ import {
   StoreController,
   ProductController,
   StaffController,
+  OrderController,
 } from '../controller/index'
 
 const router: Router = Router()
@@ -48,6 +49,10 @@ router.post('/updateCart', CartController.updateCart)
 router.post('/deleteCart', CartController.deleteCart)
 router.get('/cart', CartController.getCatItems)
 router.post('/isInCart', CartController.isInCart)
+
+// order
+router.post('/placeOrder', OrderController.placeOrder)
+
 // account
 // router.post('/checkAccount', AccountController.checkAccount)
 // router.post('/register', AccountController.register)

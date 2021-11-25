@@ -1,4 +1,5 @@
 import BaseException from '../exception/BaseException'
+import moment from 'moment'
 
 const crypto = require('crypto')
 const { MD5_PRIVATE_KEY } = require('../config/key')
@@ -132,4 +133,9 @@ export const getUnixTS = (): number => {
 
 export const getTS = (): number => {
   return new Date().getTime()
+}
+
+export const generateDateByTs = (ts?: number|undefined): String => {
+  if (!ts) ts = getTS()
+  return moment(ts).format('YYMMDDhhmmss')
 }

@@ -104,13 +104,15 @@ class Product extends BaseService {
         transaction: t,
       })
       // delete every record in CartItem table where pid = pid
-      await CartItemModel.destroy({
+      const cartItem = await CartItemModel.findAll({
         where: {
           pid,
         },
-        transaction: t,
-      })
-
+      }, { transaction: t })
+      for (let item of cartItem) {
+        item.selected = false
+        await item.save()
+      }
       product.listTS = null
       await product.save()
       await t.commit()

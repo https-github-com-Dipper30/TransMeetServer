@@ -73,6 +73,25 @@ export interface UpdateCart {
   selected?: boolean,
 }
 
+export interface Order {
+  id?: string,
+  uid?: number,
+  sid: number,
+  pid: number,
+  staff?: number|null,
+  amount: number,
+  price: number,
+  time?: number,
+  status?: boolean,
+}
+
+export interface PlaceOrder {
+  uid: number,
+  time: number,
+  totalPrice: number,
+  orders: Order[],
+}
+
 export interface IsInCart {
   uid: number,
   pid: number,

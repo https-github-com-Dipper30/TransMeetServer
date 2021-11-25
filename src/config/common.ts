@@ -83,3 +83,11 @@ export enum meatType {
   DUCK = 5,
   OTHER = 6,
 }
+
+export enum OrderStatus {
+  INITIATED = 1,
+  PENDING = 2,
+  OVERTIME = 3,
+  ABORTED = 4,
+  FINISHED = 5,
+}

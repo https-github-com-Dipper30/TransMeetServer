@@ -42,6 +42,7 @@ export enum errCode {
   // transaction error
   ORDER_ERROR = 50000,
   ORDER_NOT_FOUND = 50001,
+  ORDER_EXISTS = 50002,
 
   TRANSACTION_ERROR = 50020,
   TRANSACTION_NOT_FOUND = 50021,
@@ -64,6 +65,4 @@ export enum errCode {
 
   // cart error code
   CART_ERROR = 90000,
-
-
 }

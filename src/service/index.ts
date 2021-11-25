@@ -5,6 +5,7 @@ import TokenService from './TokenService'
 import StaffService from './StaffService'
 import FileService from './FileService'
 import CartService from './CartService'
+import OrderService from './OrderService'
 
 export {
   AuthService,
@@ -14,4 +15,5 @@ export {
   TokenService,
   FileService,
   CartService,
+  OrderService,
 }
