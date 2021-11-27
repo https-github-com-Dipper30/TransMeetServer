@@ -1,5 +1,5 @@
 import BaseService from './BaseService'
-import { GetProduct, ListProduct, ProductType, Order as OrderType, PlaceOrder } from '../types/Service'
+import { GetProduct, ListProduct, ProductType, Order as OrderType, PlaceOrder, GetOrder } from '../types/Service'
 import { createCriteria, encryptMD5, generateDateByTs, getPagerFromQuery, getTS, getUnixTS, isError } from '../utils/tools'
 import { DatabaseException, ParameterException, StoreException } from '../exception'
 import { errCode } from '../config'
@@ -109,15 +109,125 @@ class Order extends BaseService {
           sid: order.sid,
         },
       })
-
       await t.commit()
       return r
     } catch (error) {
-      console.log(error)
       await t.rollback()
       return error
     }
   }
+
+  /**
+   * get orders by dynamic searching criteria
+   * { uid, pid, sid, rid, oid, price, staff_assigned, page, size }
+   * @param query
+   * @returns 
+   */
+  async getOrders (query: GetOrder): Promise<any> {
+    if (!query) return
+    const criteria: any = createCriteria(query, ['uid', 'oid', 'pid', 'sid', 'rid', 'price', 'staff_assigned'])
+
+    // modify price criteria, >= price
+    if (criteria.hasOwnProperty('price')) {
+      Object.defineProperty(criteria, 'price', {
+        value: {
+          [Op.gt]: query.price,
+        },
+      })
+    }
+
+    // reset pager query
+    if (criteria.hasOwnProperty('page')) delete criteria['page']
+    if (criteria.hasOwnProperty('size')) delete criteria['size']
+    const [limit, offset] = getPagerFromQuery(query)
+
+    // const t = await sequelize.transaction()
+    try {
+      const orders = await OrderModel.findAndCountAll({
+        where: criteria,
+        order: [
+          ['price', 'desc'],
+          ['time', 'desc'],
+        ],
+        limit,
+        offset,
+        distinct: true,
+        include: [
+          {
+            model: ProductModel,
+          },
+          {
+            model: StoreModel,
+          },
+        ],
+      })
+
+      // await t.commit()
+      return orders
+    } catch (error) {
+      // await t.rollback()
+      return error
+    }
+  }
+
+  /**
+   * 
+   * @param time 
+   * const criteria: any = createCriteria(query, ['id', 'region_assigned', 'store_assigned', 'job_title', 'salary'])
+    if (criteria.hasOwnProperty('salary')) {
+      Object.defineProperty(criteria, 'salary', {
+        value: {
+          [Op.lt]: query.salary,
+        },
+      })
+    }
+    if (criteria.hasOwnProperty('page')) {
+      delete criteria['page']
+    }
+    if (criteria.hasOwnProperty('size')) {
+      delete criteria['size']
+    }
+    const [limit, offset] = getPagerFromQuery(query)
+    try {
+      // TODO alias will cause error, why???
+      StaffModel.belongsTo(StoreModel, { foreignKey: 'store_assigned', targetKey: 'id' })
+      StaffModel.belongsTo(RegionModel, { foreignKey: 'region_assigned', targetKey: 'id' })
+
+      const staff = await StaffModel.findAndCountAll({
+        where: criteria,
+        order: [
+          ['job_title', 'DESC'],
+          ['salary', 'DESC'],
+          ['region_assigned'],
+          ['store_assigned'],
+        ],
+        limit,
+        offset,
+        include: [
+          {
+            model: StoreModel,
+            // as: 'store',
+            attributes: ['name'],
+          },
+          {
+            model: RegionModel,
+            // as: 'region',
+            attributes: ['name'],
+          },
+        ],
+      })
+      if (!staff) return new StaffException(errCode.STAFF_ERROR)
+
+      return staff
+    } catch (error) {
+      return new DatabaseException()
+    }
+  }
+   * @param uid 
+   * @param pid 
+   * @param sid 
+   * @returns 
+   */
 
   generateOrderId (time: number|undefined, uid: any, pid: number, sid: number): String {
     if (!time) time = getTS()

@@ -155,6 +155,7 @@ class Staff extends BaseService {
         ],
         limit,
         offset,
+        distinct: true,
         include: [
           {
             model: StoreModel,

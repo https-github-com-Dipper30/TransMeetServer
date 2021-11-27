@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      // Order.belongsTo(models.User, { foreignKey: 'uid', targetKey: 'id' })
-      // Order.belongsTo(models.Product, { foreignKey: 'pid', targetKey: 'id' })
-      // Order.belongsTo(models.Staff, { foreignKey: 'staff', targetKey: 'id' })
-      // Order.belongsTo(models.Store, { foreignKey: 'sid', targetKey: 'id' })
+      Order.belongsTo(models.User, { foreignKey: 'uid', targetKey: 'id' })
+      Order.belongsTo(models.Product, { foreignKey: 'pid', targetKey: 'id' })
+      Order.belongsTo(models.Staff, { foreignKey: 'staff', targetKey: 'id' })
+      Order.belongsTo(models.Store, { foreignKey: 'sid', targetKey: 'id' })
     }
   };
   Order.init({

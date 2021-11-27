@@ -90,6 +90,7 @@ export default class ProductValidator extends BaseValidator {
       'page|number',
       'size|number',
       'showStores|boolean',
+      'sortDesc|boolean',
     ]
     return this.checkQuery(this.params, gRule)
   }

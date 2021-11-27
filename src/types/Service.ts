@@ -54,6 +54,7 @@ export interface GetProduct {
   page?: number,
   size?: number,
   showStores?: boolean,
+  sortDesc?: boolean,
 }
 
 export interface AddToCart {
@@ -96,4 +97,14 @@ export interface IsInCart {
   uid: number,
   pid: number,
   sid: number,
+}
+
+export interface GetOrder {
+  uid?: number,
+  pid?: number,
+  sid?: number,
+  rid?: number,
+  oid?: number,
+  price?: number,
+  staff_assigned?: number,
 }

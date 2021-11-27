@@ -31,4 +31,18 @@ export default class OrderValidator extends BaseValidator {
     
     return orders.every(order => this.checkParams(order, oRule))
   }
+
+  checkGet (): any {
+    const gRule = [
+      'uid|number',
+      'oid|number',
+      'sid|number',
+      'pid|number',
+      'rid|number',
+      'price|number',
+      'page|number',
+      'size|number',
+    ]
+    return this.checkQuery(this.params, gRule)
+  }
 }

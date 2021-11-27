@@ -204,6 +204,9 @@ class Product extends BaseService {
     if (criteria.hasOwnProperty('pic')) {
       delete criteria['pic']
     }
+    if (criteria.hasOwnProperty('sortDesc')) {
+      delete criteria['sortDesc']
+    }
     const includes = [
       {
         model: CategoryModel,
@@ -223,17 +226,17 @@ class Product extends BaseService {
     }
     delete criteria.showStores
     const [limit, offset] = getPagerFromQuery(query)
+    // order
+    let order = []
+    if (query.sortDesc == false) order = [['price'], ['amount', 'DESC']]
+    else if (query.sortDesc == true) order = [['price', 'DESC'], ['amount', 'DESC']]
+    else order = [['id']]
+
     try {
       // TODO order by listed? available?
       const products = await ProductModel.findAndCountAll({
         where: criteria,
-        order: [
-          ['id', 'DESC'],
-          ['cate'],
-          ['type'],
-          ['price', 'DESC'],
-          ['amount', 'DESC'],
-        ],
+        order,
         limit,
         offset,
         distinct: true, // avoid wrong count due to include

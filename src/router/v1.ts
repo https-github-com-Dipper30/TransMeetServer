@@ -52,6 +52,7 @@ router.post('/isInCart', CartController.isInCart)
 
 // order
 router.post('/placeOrder', OrderController.placeOrder)
+router.get('/orders', OrderController.getOrders)
 
 // account
 // router.post('/checkAccount', AccountController.checkAccount)
