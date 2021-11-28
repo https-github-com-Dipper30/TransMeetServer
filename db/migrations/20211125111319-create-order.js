@@ -16,6 +16,9 @@ module.exports = {
       sid: {
         type: Sequelize.INTEGER
       },
+      rid: {
+        type: Sequelize.INTEGER
+      },
       staff: {
         type: Sequelize.INTEGER
       },
@@ -31,6 +34,9 @@ module.exports = {
       status: {
         type: Sequelize.INTEGER
       },
+      rate: {
+        type: Sequelize.INTEGER
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {

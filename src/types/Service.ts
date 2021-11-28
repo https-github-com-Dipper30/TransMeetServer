@@ -54,7 +54,11 @@ export interface GetProduct {
   page?: number,
   size?: number,
   showStores?: boolean,
-  sortDesc?: boolean,
+  sort?: string,
+}
+
+export interface GetRecommend {
+  type: string, // sold || rate
 }
 
 export interface AddToCart {
@@ -104,7 +108,15 @@ export interface GetOrder {
   pid?: number,
   sid?: number,
   rid?: number,
-  oid?: number,
+  oid?: string,
   price?: number,
   staff_assigned?: number,
+  page?: number,
+  size?: number,
+}
+
+export interface RateOrder {
+  oid: string,
+  uid: number,
+  rate: number,
 }

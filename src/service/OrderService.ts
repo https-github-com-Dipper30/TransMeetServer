@@ -1,5 +1,5 @@
 import BaseService from './BaseService'
-import { GetProduct, ListProduct, ProductType, Order as OrderType, PlaceOrder, GetOrder } from '../types/Service'
+import { GetProduct, ListProduct, ProductType, Order as OrderType, PlaceOrder, GetOrder, RateOrder } from '../types/Service'
 import { createCriteria, encryptMD5, generateDateByTs, getPagerFromQuery, getTS, getUnixTS, isError } from '../utils/tools'
 import { DatabaseException, ParameterException, StoreException } from '../exception'
 import { errCode } from '../config'
@@ -17,11 +17,14 @@ const {
   Type: TypeModel,
   CartItem: CartItemModel,
   Order: OrderModel,
+  Region: RegionModel,
+  User: UserModel,
+  Rate: RateModel,
 } = models
 const { sequelize } = require('../../db/models')
 import OrderQueue from '../utils/OrderQueue'
 import { OrderStatus } from '../config/common'
-import { time } from 'console'
+import OrderException from '../exception/OrderException'
 
 class Order extends BaseService {
 
@@ -76,11 +79,15 @@ class Order extends BaseService {
       if (!product.listTS) throw new ProductException(errCode.PRODUCT_NOT_YET_LISTED)
       product.amount -= order.amount
 
+      const store = await StoreModel.findByPk(order.sid)
+      if (!store || isError(store)) throw new StoreException(errCode.STORE_NOT_FOUND)
+      const rid = store.region_id
+
       // generate order id
       order.id = String(this.generateOrderId(order.time, order.uid, order.pid, order.sid))
       order.time = order.time ? Math.floor(order.time / 1000) : getTS()
 
-      const created = await OrderModel.create({ ...order, status: OrderStatus.FINISHED }, { transaction: t })
+      const created = await OrderModel.create({ ...order, status: OrderStatus.FINISHED, rid, rate: 0 }, { transaction: t })
 
       let r = {}
       if (isError(created)) {
@@ -93,7 +100,7 @@ class Order extends BaseService {
       } else {
         r = {
           code: 200,
-          msg: 'sucess',
+          msg: 'success',
           id: order.id,
           result: true,
         }
@@ -125,7 +132,7 @@ class Order extends BaseService {
    */
   async getOrders (query: GetOrder): Promise<any> {
     if (!query) return
-    const criteria: any = createCriteria(query, ['uid', 'oid', 'pid', 'sid', 'rid', 'price', 'staff_assigned'])
+    const criteria: any = createCriteria(query)
 
     // modify price criteria, >= price
     if (criteria.hasOwnProperty('price')) {
@@ -136,12 +143,16 @@ class Order extends BaseService {
       })
     }
 
+    if (criteria.hasOwnProperty('oid')) {
+      criteria['id'] = criteria['oid']
+      delete criteria['oid']
+    }
+
     // reset pager query
     if (criteria.hasOwnProperty('page')) delete criteria['page']
     if (criteria.hasOwnProperty('size')) delete criteria['size']
     const [limit, offset] = getPagerFromQuery(query)
-
-    // const t = await sequelize.transaction()
+    
     try {
       const orders = await OrderModel.findAndCountAll({
         where: criteria,
@@ -159,6 +170,13 @@ class Order extends BaseService {
           {
             model: StoreModel,
           },
+          {
+            model: RegionModel,
+          },
+          {
+            model: UserModel,
+            attributes: ['id'],
+          },
         ],
       })
 
@@ -170,65 +188,43 @@ class Order extends BaseService {
     }
   }
 
-  /**
-   * 
-   * @param time 
-   * const criteria: any = createCriteria(query, ['id', 'region_assigned', 'store_assigned', 'job_title', 'salary'])
-    if (criteria.hasOwnProperty('salary')) {
-      Object.defineProperty(criteria, 'salary', {
-        value: {
-          [Op.lt]: query.salary,
-        },
-      })
-    }
-    if (criteria.hasOwnProperty('page')) {
-      delete criteria['page']
-    }
-    if (criteria.hasOwnProperty('size')) {
-      delete criteria['size']
-    }
-    const [limit, offset] = getPagerFromQuery(query)
+  async rateOrder (data: RateOrder): Promise<any> {
+    if (!data) return
+    const t = await sequelize.transaction()
     try {
-      // TODO alias will cause error, why???
-      StaffModel.belongsTo(StoreModel, { foreignKey: 'store_assigned', targetKey: 'id' })
-      StaffModel.belongsTo(RegionModel, { foreignKey: 'region_assigned', targetKey: 'id' })
+      const { oid, uid, rate } = data
+      const order = await OrderModel.findByPk(oid)
+      if (!order) throw new OrderException(errCode.ORDER_NOT_FOUND)
+      if (order.rate > 0 && order.rate < 6) throw new OrderException(errCode.RATE_ERROR, 'Already Rated.')
 
-      const staff = await StaffModel.findAndCountAll({
-        where: criteria,
-        order: [
-          ['job_title', 'DESC'],
-          ['salary', 'DESC'],
-          ['region_assigned'],
-          ['store_assigned'],
-        ],
-        limit,
-        offset,
-        include: [
-          {
-            model: StoreModel,
-            // as: 'store',
-            attributes: ['name'],
-          },
-          {
-            model: RegionModel,
-            // as: 'region',
-            attributes: ['name'],
-          },
-        ],
+      const pid = order.pid
+      const user_id = order.uid
+      if (user_id != uid) throw new OrderException(errCode.RATE_ERROR, 'Not Authorized To Rate.')
+      
+      const rated = await RateModel.create({
+        pid,
+        value: rate,
       })
-      if (!staff) return new StaffException(errCode.STAFF_ERROR)
+      if (!rated) throw new ProductException(errCode.RATE_ERROR)
+      order.rate = rate
+      await order.save()
 
-      return staff
+      await t.commit()
+      return rated
     } catch (error) {
-      return new DatabaseException()
+      await t.rollback()
+      return error
     }
   }
+
+  /**
+   * generates an order id
+   * @param time 
    * @param uid 
    * @param pid 
    * @param sid 
    * @returns 
    */
-
   generateOrderId (time: number|undefined, uid: any, pid: number, sid: number): String {
     if (!time) time = getTS()
     return generateDateByTs(time) + encryptMD5(`${time.toString().substring(10, 13)}&${uid}&${sid}&${pid}`)

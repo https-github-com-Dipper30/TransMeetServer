@@ -196,6 +196,7 @@ create table order (
   amount int,
   time int, // unix timestamp
   status int,
+  rate int, // rate number 0-5, 0 means not rated
   <!-- tid int, // transaction id -->
 )
 
@@ -203,3 +204,9 @@ create table order (
   id string primary,
   time int, // unix timestamp
 ) -->
+
+create table rate (
+  id int primary,
+  pid int foreign key references Product(id),
+  value int, // 1-5
+)

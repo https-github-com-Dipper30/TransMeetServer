@@ -55,6 +55,7 @@ class BaseException extends Error implements Exception {
     [errCode.CART_ERROR]: 'Cart Error',
     [errCode.ORDER_ERROR]: 'Order Error',
     [errCode.ORDER_NOT_FOUND]: 'Order Not Found',
+    [errCode.RATE_ERROR]: 'Rate Error',
   }
 
   constructor (code: number = 500, message?: string|null|undefined) {

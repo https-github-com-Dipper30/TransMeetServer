@@ -65,7 +65,7 @@ class Cart extends BaseController {
     }
   }
 
-  async getCatItems (req: any, res: any, next: any): Promise<any> {
+  async getCartItems (req: any, res: any, next: any): Promise<any> {
     try {
       const Token = new TokenService(req.headers.token)
       const { userID, auth } = Token.verifyToken()

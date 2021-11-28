@@ -38,7 +38,9 @@ router.post('/setStoreManager', StoreController.setManager)
 router.post('/addProduct', ProductController.addProduct)
 router.post('/updateProduct', ProductController.updateProduct)
 router.get('/products', ProductController.getProduct)
+router.get('/recommend', ProductController.getRecommend)
 router.post('/list', ProductController.listProduct)
+router.post('/listAll', ProductController.listAllProducts)
 router.post('/unlist', ProductController.unlistProduct)
 router.post('/deleteProduct', ProductController.deleteProduct)
 router.get('/productImage', ProductController.getProductImage)
@@ -47,11 +49,12 @@ router.get('/productImage', ProductController.getProductImage)
 router.post('/addToCart', CartController.addToCart)
 router.post('/updateCart', CartController.updateCart)
 router.post('/deleteCart', CartController.deleteCart)
-router.get('/cart', CartController.getCatItems)
+router.get('/cart', CartController.getCartItems)
 router.post('/isInCart', CartController.isInCart)
 
 // order
 router.post('/placeOrder', OrderController.placeOrder)
+router.post('/rateOrder', OrderController.rateOrder)
 router.get('/orders', OrderController.getOrders)
 
 // account

@@ -3,7 +3,7 @@ import { AuthException, ParameterException, UserException, DatabaseException, To
 import { access, errCode } from '../config'
 import { ProductValidator } from '../validator'
 import { AuthService, FileService, OrderService, TokenService } from '../service'
-import { GetProduct, ListProduct, ProductType, Order as OrderType, PlaceOrder, GetOrder } from '../types/Service'
+import { GetProduct, ListProduct, ProductType, Order as OrderType, PlaceOrder, GetOrder, RateOrder } from '../types/Service'
 import ProductService from '../service/ProductService'
 import { isError } from '../utils/tools'
 import OrderValidator from '../validator/OrderValidator'
@@ -20,9 +20,6 @@ class Order extends BaseController {
    */
   async placeOrder (req: any, res: any, next: any): Promise<any> {
     try {
-      // const Token = new TokenService(req.headers.token)
-      // if (!Token.verifyToken()) throw new TokenException()
-
       /**
        * for further access control, do the following codes
        * const res = Token.verifyToken()
@@ -35,7 +32,7 @@ class Order extends BaseController {
       if (!token) throw new TokenException()
       const { userID, auth } = token
       if (req.body?.uid != userID || !auth.includes(access.BUY_PRODUCTS)) throw new ConfigException(errCode.ACCESS_ERROR)
-      console.log(token)
+
       const data: PlaceOrder = req.body
       const valid: OrderValidator = new OrderValidator(data)
       if (!valid.goCheck()) throw new ParameterException()
@@ -58,14 +55,38 @@ class Order extends BaseController {
       const token = Token.verifyToken()
       if (!token) throw new TokenException()
       const { userID, auth } = token
-      if (req.body?.uid != userID || auth.includes(access.BROWSE_TRANSACTIONS_ADMIN)) throw new ConfigException(errCode.ACCESS_ERROR)
+      
+      if (req.query?.uid != userID && !auth.includes(access.LOG_IN_ADMIN)) throw new ConfigException(errCode.ACCESS_ERROR)
 
-      const data: GetOrder = req.body
+      const data: GetOrder = req.query
       const valid: OrderValidator = new OrderValidator(data)
       const query = valid.checkGet()
       if (!query) throw new ParameterException()
 
       const result: any = await OrderService.getOrders(query)
+      if (isError(result)) throw result
+
+      res.json({
+        code: 200,
+        data: result,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async rateOrder (req: any, res: any, next: any): Promise<any> {
+    try {
+      const Token = new TokenService(req.headers.token)
+      const token = Token.verifyToken()
+      if (!token) throw new TokenException()
+      // const { userID, auth } = token
+      
+      const data: RateOrder = req.body
+      const valid: OrderValidator = new OrderValidator(data)
+      if (!valid.checkRate()) throw new ParameterException()
+
+      const result: any = await OrderService.rateOrder(data)
       if (isError(result)) throw result
 
       res.json({

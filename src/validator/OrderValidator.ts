@@ -32,10 +32,19 @@ export default class OrderValidator extends BaseValidator {
     return orders.every(order => this.checkParams(order, oRule))
   }
 
+  checkRate (): Boolean {
+    const rRule = [
+      'uid|number|required',
+      'oid|string|required',
+      'rate|number|required',
+    ]
+    return this.checkParams(this.params, rRule) && this.isBetween(this.params.rate, 1, 5)
+  }
+
   checkGet (): any {
     const gRule = [
       'uid|number',
-      'oid|number',
+      'oid|string',
       'sid|number',
       'pid|number',
       'rid|number',

@@ -1,9 +1,9 @@
 import BaseController from './BaseController'
-import { AuthException, ParameterException, UserException, DatabaseException, TokenException, FileException } from '../exception'
-import { errCode } from '../config'
+import { AuthException, ParameterException, UserException, DatabaseException, TokenException, FileException, ConfigException } from '../exception'
+import { access, errCode } from '../config'
 import { ProductValidator } from '../validator'
 import { AuthService, FileService, TokenService } from '../service'
-import { GetProduct, ListProduct, ProductType } from '../types/Service'
+import { GetProduct, GetRecommend, ListProduct, ProductType } from '../types/Service'
 import ProductService from '../service/ProductService'
 import { isError } from '../utils/tools'
 import { nextTick } from 'process'
@@ -85,6 +85,24 @@ class Product extends BaseController {
     }
   }
 
+  async listAllProducts (req: any, res: any, next: any): Promise<any> {
+    try {
+      const Token = new TokenService(req.headers.token)
+      const { auth } = Token.verifyToken()
+      if (!auth.includes(access.LOG_IN_ADMIN)) throw new ConfigException(errCode.AUTH_ERROR)
+
+      const listed: any = await ProductService.listAllProducts()
+      if (isError(listed)) throw listed
+
+      res.json({
+        code: 200,
+        msg: 'listed!',
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async unlistProduct (req: any, res: any, next: any): Promise<any> {
     try {
       const data: ListProduct = req.body
@@ -135,6 +153,23 @@ class Product extends BaseController {
       res.json({
         code: 200,
         data: product,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getRecommend (req: any, res: any, next: any): Promise<any> {
+    try {
+      const data: GetRecommend = req.query
+      if (!data.type) throw new ParameterException()
+
+      const products = await ProductService.getRecommend(data)
+      if (isError(products)) throw products
+
+      res.json({
+        code: 200,
+        data: products,
       })
     } catch (error) {
       next(error)

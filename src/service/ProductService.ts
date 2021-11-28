@@ -1,11 +1,12 @@
 import BaseService from './BaseService'
-import { GetProduct, ListProduct, ProductType } from '../types/Service'
+import { GetProduct, GetRecommend, ListProduct, ProductType } from '../types/Service'
 import { createCriteria, getPagerFromQuery, getUnixTS, isError } from '../utils/tools'
 import { DatabaseException, ParameterException, StoreException } from '../exception'
 import { errCode } from '../config'
 import { Op } from 'sequelize'
 import ProductException from '../exception/ProductException'
 import FileService from './FileService'
+import { OrderStatus } from '../config/common'
 
 const models = require('../../db/models')
 const {
@@ -15,6 +16,8 @@ const {
   Category: CategoryModel,
   Type: TypeModel,
   CartItem: CartItemModel,
+  Rate: RateModel,
+  Order: OrderModel,
 } = models
 const { sequelize } = require('../../db/models')
 
@@ -80,6 +83,30 @@ class Product extends BaseService {
       await product.setStores(storeIDs)
       await product.save()
       
+      await t.commit()
+      return true
+    } catch (error) {
+      await t.rollback()
+      return error
+    }
+  }
+
+  async listAllProducts () {
+    const t = await sequelize.transaction()
+    try {
+      const products = await ProductModel.findAll({
+        where: {
+          listTS: null,
+        },
+      }, { transaction: t })
+      if (!products) throw new ProductException(errCode.PRODUCT_NOT_FOUND)
+      const arr = []
+      const stores = await StoreModel.findAll()
+      const sid = []
+      for (let store of stores) sid.push(store.id)
+      for (let p of products) {
+        await this.listProduct({ pid: p.id, sid })
+      }
       await t.commit()
       return true
     } catch (error) {
@@ -217,6 +244,11 @@ class Product extends BaseService {
         attributes: ['name', 'code'],
       },
       {
+        model: RateModel,
+        as: 'Ratings',
+        attributes: ['value'],
+      },
+      {
         model: StoreModel,
         attributes: ['name', 'id'],
       },
@@ -228,8 +260,10 @@ class Product extends BaseService {
     const [limit, offset] = getPagerFromQuery(query)
     // order
     let order = []
-    if (query.sortDesc == false) order = [['price'], ['amount', 'DESC']]
-    else if (query.sortDesc == true) order = [['price', 'DESC'], ['amount', 'DESC']]
+    if (query.sort == 'price') order = [['price'], ['amount', 'DESC']]
+    else if (query.sort == 'price_desc') order = [['price', 'DESC'], ['amount', 'DESC']]
+    else if (query.sort == 'rate') order = [['rate'], ['amount', 'DESC']]
+    else if (query.sort == 'rate_desc') order = [['rate', 'DESC'], ['amount', 'DESC']]
     else order = [['id']]
 
     try {
@@ -241,6 +275,9 @@ class Product extends BaseService {
         offset,
         distinct: true, // avoid wrong count due to include
         include: includes,
+        // attributes: {
+        //   includes: [sequelize.fn('AVG', sequelize.col('Ratings.value')), 'avgRating'],
+        // },
       })
       if (!products) return new ProductException(errCode.PRODUCT_ERROR)
 
@@ -255,7 +292,98 @@ class Product extends BaseService {
       
       return products
     } catch (error) {
-      return new DatabaseException()
+      return error
+    }
+  }
+
+  async getRecommend (data: GetRecommend) {
+    try {
+      const { type } = data
+      let arr: number[] = []
+      if (type == 'rate') {
+        // get products by ratings desc
+        const rates = await RateModel.findAll({
+          attributes: {
+            exclude: ['id', 'createdAt', 'updatedAt', 'value'],
+            include: [[models.sequelize.fn('AVG', models.sequelize.col('value')), 'avgRate']],
+          },
+          group: ['pid'],
+        })
+        rates.sort((a: any, b: any) => b.dataValues.avgRate - a.dataValues.avgRate)
+        for (let i of rates) {
+          arr.push(i.dataValues.pid)
+        }
+        return await this.findAllRecommend(arr)
+      } else if (type == 'sold') {
+        // get products by number of orders in recent month
+        const current = getUnixTS()
+        const aMonthBefore = current - 30 * 24 * 60 * 60
+        const orders = await OrderModel.findAll({
+          where: {
+            status: OrderStatus.FINISHED,
+            time: {
+              [Op.gt]: aMonthBefore,
+            },
+          },
+          attributes: {
+            exclude: ['id', 'uid', 'sid', 'rid', 'staff', 'price', 'amount', 'status', 'rate', 'id', 'time'],
+            include: [[models.sequelize.fn('COUNT', models.sequelize.col('pid')), 'sold']],
+          },
+          group: ['pid'],
+        })
+        orders.sort((a: any, b: any) => b.dataValues.sold - a.dataValues.sold)
+        for (let i of orders) {
+          arr.push(i.dataValues.pid)
+        }
+        return await this.findAllRecommend(arr)
+      } else {
+        return await this.findAllRecommend(arr)
+      }
+      // find products by id arr
+      
+    } catch (error) {
+      return error
+    }
+  }
+
+  async findAllRecommend (arr: number[]) {
+    try {
+      const products = await ProductModel.findAll({
+        where: {
+          id: {
+            [Op.in]: arr,
+          },
+          listTS: {
+            [Op.not]: null,
+          },
+        },
+        include: [
+          {
+            model: CategoryModel,
+            attributes: ['name'],
+          },
+          {
+            model: TypeModel,
+            attributes: ['name', 'code'],
+          },
+          {
+            model: RateModel,
+            as: 'Ratings',
+            attributes: ['value'],
+          },
+        ],
+        limit: 10,
+        order: [['price']],
+      })
+      // read image file
+      for (let product of products) {
+        let p = product.dataValues
+        const images = await FileService.readProductImage(p.id)
+        if (images && images.length > 0) product.dataValues.imgList = images
+      }
+      return products
+    } catch (error) {
+      return error
     }
   }
 
