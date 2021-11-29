@@ -14,6 +14,12 @@ module.exports = {
       annual_income: {
         type: Sequelize.INTEGER
       },
+      phone: {
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
+      },
       street: {
         type: Sequelize.STRING
       },

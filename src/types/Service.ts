@@ -57,6 +57,10 @@ export interface GetProduct {
   sort?: string,
 }
 
+export interface SearchProduct {
+  search: string,
+}
+
 export interface GetRecommend {
   type: string, // sold || rate
 }

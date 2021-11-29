@@ -191,6 +191,17 @@ class BaseValidator implements Validator {
     return true
   }
 
+  isPhone (phone: number): Boolean {
+    const phoneExp = /^[0-9]{10}/
+    return phoneExp.test(phone.toString())
+  }
+
+  isEmail (email: string): Boolean {
+    const emailExp = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/
+    return emailExp.test(email)
+
+  }
+
 }
 
 module.exports = BaseValidator

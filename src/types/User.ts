@@ -9,6 +9,8 @@ export interface User {
 }
 
 export interface HomeCustomer extends User {
+  phone: number,
+  email: string,
   marriage_status: number,
   gender: number,
   birth: number,
@@ -20,6 +22,8 @@ export interface HomeCustomer extends User {
 }
 
 export interface BusinessCustomer extends User {
+  phone: string,
+  email: string,
   name: string,
   annual_income: number,
   street: string,
@@ -27,6 +31,24 @@ export interface BusinessCustomer extends User {
   state: number,
   zip_code: number,
   cate: string,
+}
+
+export interface UpdateUser {
+  uid: number,
+  role_id: number,
+  username?: string,
+  phone?: string,
+  email?: string,
+  name?: string,
+  annual_income?: number,
+  street?: string,
+  city?: string,
+  state?: number,
+  zip_code?: number,
+  cate?: string,
+  marriage_status?: number,
+  gender?: number,
+  birth?: number,
 }
 
 export interface Admin extends User {

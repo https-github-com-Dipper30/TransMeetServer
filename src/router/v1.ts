@@ -14,7 +14,9 @@ const router: Router = Router()
 // auth
 router.post('/register', AuthController.register)
 router.post('/login', AuthController.login)
+router.get('/userInfo', AuthController.getUserInfo)
 router.post('/token', AuthController.getInfoByToken) // login using token
+router.post('/updateUserInfo', AuthController.update)
 
 // config
 router.get('/states', ConfigController.getStates)
@@ -23,13 +25,15 @@ router.get('/regions', ConfigController.getRegions)
 router.get('/categories', ConfigController.getCategories)
 router.get('/types', ConfigController.getTypes)
 router.post('/productImage', ConfigController.upload)
+router.get('/profitByRegion', ConfigController.getProfitByRegion)
+router.get('/consumption', ConfigController.getConsumptionOfUsers)
 
 // staff
 router.post('/staff', StaffController.addStaff)
 router.get('/staff', StaffController.getStaff)
 
 // store
-router.post('/stores', StoreController.addStore)
+router.post('/store', StoreController.addStore)
 router.get('/stores', StoreController.getStore)
 router.get('/deleteStore', StoreController.deleteStore)
 router.post('/setStoreManager', StoreController.setManager)
@@ -38,6 +42,7 @@ router.post('/setStoreManager', StoreController.setManager)
 router.post('/addProduct', ProductController.addProduct)
 router.post('/updateProduct', ProductController.updateProduct)
 router.get('/products', ProductController.getProduct)
+router.get('/product', ProductController.searchProduct)
 router.get('/recommend', ProductController.getRecommend)
 router.post('/list', ProductController.listProduct)
 router.post('/listAll', ProductController.listAllProducts)

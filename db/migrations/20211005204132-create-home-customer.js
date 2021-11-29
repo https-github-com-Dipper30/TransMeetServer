@@ -11,6 +11,12 @@ module.exports = {
       marriage_status: {
         type: Sequelize.INTEGER
       },
+      phone: {
+        type: Sequelize.STRING
+      },
+      email: {
+        type: Sequelize.STRING
+      },
       gender: {
         type: Sequelize.INTEGER
       },

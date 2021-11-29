@@ -95,4 +95,11 @@ export default class ProductValidator extends BaseValidator {
     return this.checkQuery(this.params, gRule)
   }
 
+  checkSearch (): any {
+    const gRule = [
+      'search|string|required',
+    ]
+    return this.checkQuery(this.params, gRule)
+  }
+
 }

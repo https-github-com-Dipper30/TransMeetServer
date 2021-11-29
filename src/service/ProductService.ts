@@ -1,5 +1,5 @@
 import BaseService from './BaseService'
-import { GetProduct, GetRecommend, ListProduct, ProductType } from '../types/Service'
+import { GetProduct, GetRecommend, ListProduct, ProductType, SearchProduct } from '../types/Service'
 import { createCriteria, getPagerFromQuery, getUnixTS, isError } from '../utils/tools'
 import { DatabaseException, ParameterException, StoreException } from '../exception'
 import { errCode } from '../config'
@@ -231,8 +231,8 @@ class Product extends BaseService {
     if (criteria.hasOwnProperty('pic')) {
       delete criteria['pic']
     }
-    if (criteria.hasOwnProperty('sortDesc')) {
-      delete criteria['sortDesc']
+    if (criteria.hasOwnProperty('sort')) {
+      delete criteria['sort']
     }
     const includes = [
       {
@@ -356,6 +356,9 @@ class Product extends BaseService {
           listTS: {
             [Op.not]: null,
           },
+          amount: {
+            [Op.gt]: 0,
+          },
         },
         include: [
           {
@@ -372,10 +375,66 @@ class Product extends BaseService {
             attributes: ['value'],
           },
         ],
-        limit: 10,
+        limit: 5,
         order: [['price']],
       })
       // read image file
+      for (let product of products) {
+        let p = product.dataValues
+        const images = await FileService.readProductImage(p.id)
+        if (images && images.length > 0) product.dataValues.imgList = images
+      }
+      return products
+    } catch (error) {
+      return error
+    }
+  }
+
+  async searchProduct (query: SearchProduct) {
+    try {
+      const { search } = query
+      const products = await ProductModel.findAll({
+        where: {
+          listTS: {
+            [Op.not]: null,
+          },
+          amount: {
+            [Op.gt]: 0,
+          },
+          [Op.or]: [
+            {
+              name: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+            {
+              description: {
+                [Op.like]: `%${search}%`,
+              },
+            },
+          ],
+        },
+        include: [
+          {
+            model: CategoryModel,
+            attributes: ['name'],
+          },
+          {
+            model: TypeModel,
+            attributes: ['name', 'code'],
+          },
+          {
+            model: RateModel,
+            as: 'Ratings',
+            attributes: ['value'],
+          },
+          {
+            model: StoreModel,
+            attributes: ['name', 'id'],
+          },
+        ],
+        limit: 10,
+      })
       for (let product of products) {
         let p = product.dataValues
         const images = await FileService.readProductImage(p.id)

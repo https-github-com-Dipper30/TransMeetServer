@@ -1,7 +1,7 @@
-import { errCode } from '../config'
+import { access, errCode } from '../config'
 import { ParameterException, ConfigException, FileException } from '../exception'
 import BaseController from './BaseController'
-import { ConfigService, FileService, StaffService } from '../service'
+import { ConfigService, FileService, StaffService, TokenService } from '../service'
 import { FileValidator } from '../validator'
 import { isError } from '../utils/tools'
 const B = require('../validator/BaseValidator')
@@ -129,6 +129,42 @@ class Config extends BaseController {
           msg: 'uploaded',
         })
       }
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getProfitByRegion (req: any, res: any, next: any): Promise<any> {
+    try {
+      const Token = new TokenService(req.headers.token)
+      const { userID, auth } = Token.verifyToken()
+      if (!auth?.includes(access.LOG_IN_MAIN)) throw new ConfigException(errCode.ACCESS_ERROR)
+      
+      const profits = await ConfigService.getRegionalProfit()
+      if(isError(profits)) throw profits
+
+      res.json({
+        code: 200,
+        data: profits,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getConsumptionOfUsers (req: any, res: any, next: any): Promise<any> {
+    try {
+      const Token = new TokenService(req.headers.token)
+      const { userID, auth } = Token.verifyToken()
+      if (!auth?.includes(access.LOG_IN_MAIN)) throw new ConfigException(errCode.ACCESS_ERROR)
+      
+      const users = await ConfigService.getConsumptionOfUsers()
+      if(isError(users)) throw users
+
+      res.json({
+        code: 200,
+        data: users,
+      })
     } catch (error) {
       next(error)
     }

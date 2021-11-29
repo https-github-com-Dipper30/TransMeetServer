@@ -3,7 +3,7 @@ import { AuthException, ParameterException, UserException, DatabaseException, To
 import { access, errCode } from '../config'
 import { ProductValidator } from '../validator'
 import { AuthService, FileService, TokenService } from '../service'
-import { GetProduct, GetRecommend, ListProduct, ProductType } from '../types/Service'
+import { GetProduct, GetRecommend, ListProduct, ProductType, SearchProduct as SearchProductType } from '../types/Service'
 import ProductService from '../service/ProductService'
 import { isError } from '../utils/tools'
 import { nextTick } from 'process'
@@ -134,6 +134,24 @@ class Product extends BaseController {
       res.json({
         code: 200,
         msg: 'deleted!',
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async searchProduct (req: any, res: any, next: any): Promise<any> {
+    try {
+      const valid: ProductValidator = new ProductValidator(req.query)
+      const query: SearchProductType = valid.checkSearch()
+      if (!query) throw new ParameterException()
+
+      const result: any = await ProductService.searchProduct(query)
+      if (isError(result)) throw result
+
+      res.json({
+        code: 200,
+        data: result,
       })
     } catch (error) {
       next(error)

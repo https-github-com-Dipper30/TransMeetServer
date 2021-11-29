@@ -1,10 +1,11 @@
 import BaseController from './BaseController'
-import { User, HomeCustomer, Admin, BusinessCustomer } from '../types/User'
+import { User, HomeCustomer, Admin, BusinessCustomer, UpdateUser } from '../types/User'
 import { Validator, Account } from '../types/common'
 import { AuthException, ParameterException, UserException, DatabaseException, TokenException } from '../exception'
 import { errCode } from '../config'
 import { AuthValidator } from '../validator'
 import { AuthService, TokenService } from '../service'
+import { isError } from '../utils/tools'
 
 class Auth extends BaseController {
   constructor () {
@@ -83,6 +84,55 @@ class Auth extends BaseController {
         data: {
           user,
         },
+      })
+
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getUserInfo (req: any, res: any, next: any): Promise<any> {
+    try {
+      const valid: AuthValidator = new AuthValidator(req.query)
+      const query: any = valid.checkInfo()
+      if (!query) throw new ParameterException()
+
+      const token = new TokenService(req.headers.token)
+      const { userID } = token.verifyToken()
+      if (!userID) throw new TokenException()
+      if (userID != query.uid) throw new AuthException(errCode.ACCESS_ERROR)
+
+      const info = await AuthService.getUserInfo(query)
+      if (isError(info)) throw info
+
+      res.json({
+        code: 200,
+        data: info,
+      })
+
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async update (req: any, res: any, next: any): Promise<any> {
+    try {
+      const data: UpdateUser = req.body
+      console.log(data)
+      const valid: AuthValidator = new AuthValidator(data)
+      if (!valid.checkUpdate()) throw new ParameterException()
+
+      const token = new TokenService(req.headers.token)
+      const { userID } = token.verifyToken()
+      if (!userID) throw new TokenException()
+      if (userID != data.uid) throw new AuthException(errCode.ACCESS_ERROR)
+
+      const updated = await AuthService.update(data)
+      if (isError(updated)) throw updated
+
+      res.json({
+        code: 200,
+        msg: 'updated',
       })
 
     } catch (error) {

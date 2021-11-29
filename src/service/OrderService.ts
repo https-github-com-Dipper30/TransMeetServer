@@ -157,8 +157,8 @@ class Order extends BaseService {
       const orders = await OrderModel.findAndCountAll({
         where: criteria,
         order: [
-          ['price', 'desc'],
           ['time', 'desc'],
+          ['price', 'desc'],
         ],
         limit,
         offset,
