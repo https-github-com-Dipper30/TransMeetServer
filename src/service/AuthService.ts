@@ -117,9 +117,6 @@ class Auth extends BaseService {
           uid: id,
         }, { transaction: t })
       } else if (role_id == role.HOME_CUSTOMER) {
-        //
-        console.log(params)
-        
         res = await Home_Customer.create({
           marriage_status: params.marriage_status,
           gender: params.gender,
@@ -138,7 +135,6 @@ class Auth extends BaseService {
       return res
     } catch (error) {
       // something wrong
-      console.log(error)
       await t.rollback()
       return false
     }

@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Home_Customer.belongsTo(models.User, { foreignKey: 'uid', targetKey: 'id' })
-      console.log('hel')
     }
   };
   Home_Customer.init({

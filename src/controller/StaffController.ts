@@ -48,7 +48,6 @@ class Staff extends BaseController {
       const data = valid.checkGet()
       if (!data) throw new ParameterException()
 
-      // console.log('dd',data)
       const staff = await StaffService.getStaff(data)
       if (isError(staff)) throw staff
 

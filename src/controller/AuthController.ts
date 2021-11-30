@@ -118,7 +118,6 @@ class Auth extends BaseController {
   async update (req: any, res: any, next: any): Promise<any> {
     try {
       const data: UpdateUser = req.body
-      console.log(data)
       const valid: AuthValidator = new AuthValidator(data)
       if (!valid.checkUpdate()) throw new ParameterException()
 
