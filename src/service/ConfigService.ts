@@ -94,7 +94,7 @@ class Config extends BaseService {
    */
    async getConsumptionOfUsers () {
     try {
-      const query = 'SELECT SUM(o.price) consumption,u.id uid,u.username,u.role_id FROM orders o LEFT JOIN Users u ON o.uid=u.id GROUP BY uid ORDER BY consumption DESC LIMIT 10;'
+      const query = 'SELECT SUM(o.price) consumption,u.id uid,u.username,u.role_id FROM Orders o LEFT JOIN Users u ON o.uid=u.id GROUP BY uid ORDER BY consumption DESC LIMIT 10;'
       const [users, metadata] = await sequelize.query(query)
       if (!users) return []
       return users
