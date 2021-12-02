@@ -1,53 +1,55 @@
 # User
 
-create table user {
+create table user (
   id int primary,
-  username varchar(15), //
+  username varchar(15),
   password varchar(20),
   role_id int foreign key role (id),
-}
+)
 
 // admin, (region)manager, store lord, salesman, home, business
 
-create table role {
+create table role (
   id int primary,
   name varchar(255),
   type int,
-}
+)
 
-create table access {
+create table access (
   id int primary,
   name varchar(255),
   type int,
-}
+)
 
-create table role_access {
+create table role_access (
   id int primary,
-  rid int foreign key role (id),
-  aid int foreign key access (id),
-}
+  rid int foreign key role (type),
+  aid int foreign key access (type),
+)
 
-create table category {
+create table category (
   id int primary,
   name varchar(255),
   code int,
-}
+)
 
-create table category {
+create table type (
   id int primary,
   name varchar(255),
   code int,
   cate_code int foreign key references category(code),
-}
+)
 
 create table home_customer (
   id int not null primary,
   marriage_status int, 0-single 1-married 2-divorced
   gender int,
-  birth int, // 10 digits ts
+  birth int,
+  phone varchar(255),
+  email varchar(255),
   annual_income ,
-  street varchar(255), // 0 < len <= 30
-  city varchar(55), // 0 < len <= 20
+  street varchar(255),
+  city varchar(55),
   state_id int,
   zip_code int,
   uid int foreign key user (id),
@@ -57,8 +59,10 @@ create table business_customer (
   id int primary,
   cate varchar(25),
   annual_income bigint,
-  street varchar(255), // 0 < len <= 30
-  city varchar(55), // 0 < len <= 20
+  phone varchar(255),
+  email varchar(255),
+  street varchar(255),
+  city varchar(55),
   state_id int,
   zip_code int,
   uid int foreign key user (id),
@@ -92,12 +96,12 @@ create Table region {
 }
 
 create Table store (
-  id int not null primary,
+  id int primary,
   manager_id int foreign key staff(id),
-  name varchar(255),
-  street varchar(255),
-  state_id int,
-  zip_code int,
+  name varchar(255) not null,
+  street varchar(255) not null,
+  state_id int not null,
+  zip_code int not null,
   region_id int foreign key region(id),
 )
 
@@ -107,33 +111,34 @@ create Table store (
   staff_id int foreign key staff(id),
 ) -->
 
-create Table product {
+create Table product (
   id int not null primary,
   name varchar(255),
   amount int min(0),
   price bigint,
-  unit varchar(255), // the unit price of the product is [price] $ / [unit], for example 99.99$ / 1 packet
-  cate int, // first order
-  type int, // second order
+  unit varchar(255),
+  cate int,
+  type int,
   description varchar(255),
-  createTS int, // unix timestamp of creation
-  listTS int, // timestamp of when the product is listed
-}
+  createTS int,
+  listTS int
+)
 
-create Table cart_item {
+create Table cartitem (
   id int not null primary,
   uid int foreign key user(id),
   pid int foreign key product(id),
   sid int foreign key store(id),
-  amount int min(0), // product amount
+  amount int min(0),
+  selected boolean
   <!-- status int, // selected? -->
-}
+)
 
-create Table product_store {
+create Table product_store (
   id int not null primary,
   pid int foreign key product(id),
-  sid int foreign key store{id},
-}
+  sid int foreign key store{id}
+)
 
 <!-- create Table order {
   id int not null primary,
@@ -145,35 +150,13 @@ create Table product_store {
   tran
 } -->
 
-create Table transaction {
-  id int not null primary,
-  customer_id int foreign key customer(id),
-  total_price bigint, // 原价
-  extra_fee bigint, // 其他费用，如运费
-  payment bigint, // 实付金钱
-  status int, // 交易状态
-  start_ts int, // 交易发起时间戳
-  end_ts int, // 交易结束时间戳
-}
-
 <!-- create table transaction_order (
   id int not null primary,
   tid int foreign key transaction (id),
   oid int foreign key order (id),
 ) -->
 
-create Table order {
-  id int not null primary,
-  order_no varchar(255) unique,
-  customer_id int foreign key customer(id),
-  product_id int foreign key product(id),
-  store_id int foreign key store(id)
-  product_amount int,
-  salesperson_id int foreign key staff(id),
-  transaction_id int foreign key transaction(id),
-}
-
-create table comments (
+<!-- create table comments (
   id int primary,
   comment varchar(255),
   rate int, // 1~5
@@ -182,10 +165,10 @@ create table comments (
   status int,
   order_no int foreign key references order(order_no),
   user_id int foreign key references user(id),
-)
+) -->
 
 <!-- Order and Transaction -->
-<!-- TODO index staff id -->
+<!-- rate number 0-5, 0 means not rated -->
 create table order (
   id string primary,
   uid int foreign key references User(id),
@@ -194,9 +177,9 @@ create table order (
   staff int foreign key references Staff(id),
   price int,
   amount int,
-  time int, // unix timestamp
+  time int,
   status int,
-  rate int, // rate number 0-5, 0 means not rated
+  rate int 
   <!-- tid int, // transaction id -->
 )
 

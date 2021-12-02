@@ -310,7 +310,9 @@ class Product extends BaseService {
           group: ['pid'],
         })
         rates.sort((a: any, b: any) => b.dataValues.avgRate - a.dataValues.avgRate)
+        let limit = 5
         for (let i of rates) {
+          if (limit-- <= 0) break
           arr.push(i.dataValues.pid)
         }
         return await this.findAllRecommend(arr)
@@ -332,7 +334,9 @@ class Product extends BaseService {
           group: ['pid'],
         })
         orders.sort((a: any, b: any) => b.dataValues.sold - a.dataValues.sold)
+        let limit = 5
         for (let i of orders) {
+          if (limit-- <= 0) break
           arr.push(i.dataValues.pid)
         }
         return await this.findAllRecommend(arr)
@@ -375,7 +379,6 @@ class Product extends BaseService {
             attributes: ['value'],
           },
         ],
-        limit: 5,
         order: [['price']],
       })
       // read image file
