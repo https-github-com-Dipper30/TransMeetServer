@@ -21,7 +21,7 @@ class BaseValidator implements Validator {
       // 将rule字符串转成数组 
       let single_rule_arr: string[] = single_rule.split('|')
       const key = single_rule_arr[0]
-      const type = single_rule_arr[1]
+      const type = single_rule_arr[1] 
       // 当指定参数名不存在时，优先校验required属性
       if ( !params.hasOwnProperty(key) ) {
         if ( single_rule_arr.includes('required') ) return false
@@ -84,7 +84,7 @@ class BaseValidator implements Validator {
       } else {
         // 此时请求参数中存在规则内的属性名
         // 判断是否可以为空值
-        if ( single_rule_arr.includes('allowNull') && queryIsNull(params[key]) ) {
+        if ( single_rule_arr.includes('allowNull') && queryIsNull(params[key]) ) { 
           continue
         }
         switch (type) {
