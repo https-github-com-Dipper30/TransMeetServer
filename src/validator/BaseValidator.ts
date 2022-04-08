@@ -18,7 +18,7 @@ class BaseValidator implements Validator {
     // 遍历每一个属性名的规则
     for (let i = 0; i < rules.length; i++) {
       const single_rule = rules[i]
-      // 将rule字符串转成数组
+      // 将rule字符串转成数组 
       let single_rule_arr: string[] = single_rule.split('|')
       const key = single_rule_arr[0]
       const type = single_rule_arr[1]
