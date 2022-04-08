@@ -13,7 +13,7 @@ class Token {
     const data: {userID: number, auth: number[] } = this.data
     // const created = Math.floor(Date.now() / 1000)
     
-    let token = jwt.sign({ ...data }, TOKEN_PRIVATE_KEY, { expiresIn: TOKEN_EXPIRE_IN })
+    let token = jwt.sign({ ...data }, TOKEN_PRIVATE_KEY, { expiresIn: TOKEN_EXPIRE_IN })   
     return token
   }
 
