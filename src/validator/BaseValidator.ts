@@ -99,7 +99,7 @@ class BaseValidator implements Validator {
             if ( !validator.isBoolean(params[key]) && this.stringIsBoolean(params[key]) ) return false
             params[key] = params[key] == 'false' ? false : true
             break
-          case 'timestamp':
+          case 'timestamp':  
             if ( !this.stringIsNumeric(params[key]) ) return false
             params[key] = Number(params[key])
             if ( !this.isTimeStamp(params[key]) ) return false
