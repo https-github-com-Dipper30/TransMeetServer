@@ -172,7 +172,7 @@ class BaseValidator implements Validator {
     return this.stringIsDigit.test(s)
   }
 
-  stringIsBoolean (s: string): Boolean {
+  stringIsBoolean (s: string): Boolean { 
     return s == 'false' || s == 'true'
   }
 
